@@ -77,16 +77,14 @@ MIT License
 
 ### Demo URL
 ```
-[TO BE ADDED - Deploy demo first]
-Example: https://zugzwang-demo.vercel.app
+https://zugzwang.vercel.app
 ```
 
 ### Thumbnail Image URL (1200x630px)
 ```
-https://your-demo-url.vercel.app/api/og
+https://zugzwang.vercel.app/api/og
 ```
-**Note**: Replace `your-demo-url` with your actual deployed demo URL.
-The template includes a dynamic OG image generator that creates the thumbnail automatically.
+**Note**: The template includes a dynamic OG image generator that creates the thumbnail automatically.
 
 ### Screenshots (Optional)
 ```
@@ -223,9 +221,8 @@ shopify, ecommerce, nextjs16, typescript, react19, tailwindcss, shadcn-ui, store
 
 ### Deploy Button Markdown
 ```markdown
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/byronwade/Zugzwang&env=NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20store%20configuration%20required&envLink=https://github.com/byronwade/Zugzwang/blob/main/INSTALLATION.md&project-name=zugzwang-store&repository-name=zugzwang-store&demo-title=Zugzwang%20Demo&demo-description=Modern%20Next.js%2016%20Shopify%20Storefront&demo-url=https://your-demo-url.vercel.app&demo-image=https://your-demo-url.vercel.app/api/og)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/byronwade/Zugzwang&env=NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20store%20configuration%20required&envLink=https://github.com/byronwade/Zugzwang/blob/main/INSTALLATION.md&project-name=zugzwang-store&repository-name=zugzwang-store&demo-title=Zugzwang%20Demo&demo-description=Modern%20Next.js%2016%20Shopify%20Storefront&demo-url=https://zugzwang.vercel.app&demo-image=https://zugzwang.vercel.app/api/og)
 ```
-**Note**: Replace both instances of `your-demo-url` with your actual deployed demo URL.
 
 ---
 
@@ -290,12 +287,12 @@ Before submitting, ensure:
 - [x] ✅ MIT License file exists
 - [x] ✅ README.md is comprehensive
 - [x] ✅ .env.example file exists with all variables
-- [ ] ⏳ Working demo is deployed to Vercel
-- [ ] ⏳ Thumbnail image (1200x630px) is created and uploaded
+- [x] ✅ Working demo is deployed to Vercel (https://zugzwang.vercel.app)
+- [x] ✅ Thumbnail image (1200x630px) via dynamic OG generator
 - [x] ✅ INSTALLATION.md with step-by-step setup guide exists
 - [x] ✅ CUSTOMIZATION.md with theming guide exists
 - [x] ✅ All required environment variables documented
-- [ ] ⏳ Deploy button is tested and working
+- [x] ✅ Deploy button configured with demo URL
 - [x] ✅ Template follows Next.js best practices
 - [x] ✅ Code is production-ready
 - [x] ✅ Mobile responsive design
@@ -318,10 +315,10 @@ The template uses Next.js's `@vercel/og` package to dynamically generate Open Gr
 
 ### Usage for Submission:
 ```
-https://your-demo-url.vercel.app/api/og
+https://zugzwang.vercel.app/api/og
 ```
 
-Simply replace `your-demo-url` with your deployed demo URL and this will be your thumbnail!
+This is the exact URL to use for the Vercel marketplace thumbnail!
 
 ### Customization (Optional):
 The OG image generator supports parameters:
@@ -331,7 +328,7 @@ The OG image generator supports parameters:
 
 Example:
 ```
-https://your-demo-url.vercel.app/api/og?title=Zugzwang&description=Next.js+16+Template
+https://zugzwang.vercel.app/api/og?title=Zugzwang&description=Next.js+16+Template
 ```
 
 ---
@@ -454,6 +451,10 @@ After Vercel approves the template:
 
 **Submission Date**: [TO BE FILLED]
 
-**Status**: Ready for submission pending demo deployment and thumbnail creation
+**Status**: ✅ Ready for submission! All requirements complete.
+
+**Demo URL**: https://zugzwang.vercel.app
+
+**Thumbnail URL**: https://zugzwang.vercel.app/api/og
 
 **Last Updated**: 2025-10-17
