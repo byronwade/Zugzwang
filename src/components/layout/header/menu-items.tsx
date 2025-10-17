@@ -76,8 +76,27 @@ async function buildDynamicFallbackMenu(): Promise<MenuItem[]> {
 	}
 }
 
-// Get menu items with caching
+// Count nested menu items recursively
+function countNestedItems(items: MenuItem[]): number {
+	return items.reduce((count, item) => {
+		const subCount = item.items ? countNestedItems(item.items) : 0;
+		return count + 1 + subCount;
+	}, 0);
+}
+
+// Check if menu has any nested items
+function hasNestedItems(items: MenuItem[]): boolean {
+	return items.some((item) => item.items && item.items.length > 0);
+}
+
+// Get menu items with caching - legacy function for backward compatibility
 export const getMenuItems = cache(async (): Promise<MenuItem[]> => {
+	const data = await getMenuData();
+	return data.items;
+});
+
+// Get complete menu data with strategy analysis
+export const getMenuData = cache(async (): Promise<MenuData> => {
 	try {
 		await loadStoreConfiguration();
 		const config = getStoreConfigSafe();
@@ -91,14 +110,39 @@ export const getMenuItems = cache(async (): Promise<MenuItem[]> => {
 			menuItems = await getMenuRobust(mainMenuHandle);
 		}
 
+		let items: MenuItem[];
+
 		// If we have menu items from Shopify, use them
 		if (menuItems && menuItems.length > 0) {
-			const mapped = mapMenuItems(menuItems);
-			return mapped;
+			items = mapMenuItems(menuItems);
+		} else {
+			items = await buildDynamicFallbackMenu();
 		}
-		const fallbackMenu = await buildDynamicFallbackMenu();
-		return fallbackMenu;
+
+		// Get collections count for analysis
+		const collections = await getAllCollections();
+		const collectionCount = collections?.length || 0;
+
+		// Count total menu items (including nested)
+		const menuItemCount = countNestedItems(items);
+		const hasNested = hasNestedItems(items);
+
+		// For pages, we'll estimate based on typical store sizes
+		// In a real scenario, you'd fetch actual page count
+		const estimatedPageCount = Math.min(collectionCount + 5, 15);
+
+		// Analyze and get strategy
+		const strategy = analyzeMenuStructure(collectionCount, estimatedPageCount, menuItemCount, hasNested);
+
+		return {
+			items,
+			strategy,
+		};
 	} catch (_error) {
-		return BASIC_FALLBACK_MENU;
+		// Fallback with minimal strategy
+		return {
+			items: BASIC_FALLBACK_MENU,
+			strategy: analyzeMenuStructure(0, 0, BASIC_FALLBACK_MENU.length, false),
+		};
 	}
 });

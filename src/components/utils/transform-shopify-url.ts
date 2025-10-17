@@ -16,11 +16,8 @@ export function transformShopifyUrl(url: string): string {
 		// Remove trailing slashes
 		path = path.replace(/\/$/, "");
 
-		// Handle common Shopify patterns
-		if (path.startsWith("/pages/")) {
-			// Transform /pages/about to /about
-			path = path.replace("/pages/", "/");
-		}
+		// Keep /pages/ prefix since that's where our dynamic route is
+		// Keep /products/, /collections/, /blogs/ prefixes as well
 
 		return path || "/";
 	} catch (_error) {
@@ -29,11 +26,6 @@ export function transformShopifyUrl(url: string): string {
 
 		// Remove trailing slashes
 		path = path.replace(/\/$/, "");
-
-		// Remove /pages/ prefix if present
-		if (path.startsWith("/pages/")) {
-			path = path.replace("/pages/", "/");
-		}
 
 		return path || "/";
 	}

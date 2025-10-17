@@ -42,6 +42,7 @@ import { Link } from "@/components/ui/link";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useStoreConfig } from "@/hooks/use-store-config";
 import { CONTENT } from "@/lib/config/wadesdesign.config";
+import type { MenuStrategy } from "@/lib/utils/menu-analyzer";
 import { MenuSheetFixed } from "./menu-sheet-fixed";
 
 type MenuItem = {
@@ -54,6 +55,7 @@ type MenuItem = {
 type HeaderClientProps = {
 	initialMenuItems: MenuItem[];
 	isAuthenticated: boolean;
+	menuStrategy: MenuStrategy;
 };
 
 type SearchHandlers = {
@@ -162,7 +164,7 @@ const _SearchBar = memo(function SearchBar({
 	);
 });
 
-export function HeaderClient({ initialMenuItems, isAuthenticated }: HeaderClientProps) {
+export function HeaderClient({ initialMenuItems, isAuthenticated, menuStrategy }: HeaderClientProps) {
 	// 1. Context hooks first
 	const { openCart, cart } = useCart();
 	const { wishlist } = useWishlist();
@@ -627,7 +629,7 @@ export function HeaderClient({ initialMenuItems, isAuthenticated }: HeaderClient
 				<nav className="h-[var(--header-nav-height)] flex-shrink-0 border-border border-b bg-background">
 					<div className="container mx-auto h-full px-4">
 						<div className="flex h-full items-center">
-							<MenuSheetFixed items={initialMenuItems} />
+							<MenuSheetFixed items={initialMenuItems} strategy={menuStrategy} />
 
 							<ScrollArea className="w-full whitespace-nowrap">
 								<div className="flex items-center space-x-6">

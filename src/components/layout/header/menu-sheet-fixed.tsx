@@ -1,9 +1,8 @@
 "use client";
 
-import { BookOpen, ChevronRight, Heart, Home, Loader2, Menu, Package, ShoppingCart } from "lucide-react";
-import Image from "next/image";
+import { Heart, Home, Loader2, Menu, ShoppingCart, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCart } from "@/components/providers/cart-provider";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -13,6 +12,11 @@ import { useStoreConfig } from "@/hooks/use-store-config";
 import { getAllCollections, getPages } from "@/lib/api/shopify/actions";
 import { CONTENT } from "@/lib/config/wadesdesign.config";
 import type { ShopifyCollection, ShopifyPage } from "@/lib/types";
+import type { MenuStrategy } from "@/lib/utils/menu-analyzer";
+import { LargeLayout } from "./menu-layouts/large-layout";
+import { MediumLayout } from "./menu-layouts/medium-layout";
+import { MinimalLayout } from "./menu-layouts/minimal-layout";
+import { SmallLayout } from "./menu-layouts/small-layout";
 
 type MenuItem = {
 	id: string;
@@ -23,6 +27,7 @@ type MenuItem = {
 
 type MenuSheetProps = {
 	items: MenuItem[];
+	strategy: MenuStrategy;
 };
 
 const buildPageUrl = (page: ShopifyPage) => {
@@ -32,7 +37,7 @@ const buildPageUrl = (page: ShopifyPage) => {
 	return transformShopifyUrl(page.onlineStoreUrl || "/");
 };
 
-export function MenuSheetFixed({ items }: MenuSheetProps) {
+export function MenuSheetFixed({ items, strategy }: MenuSheetProps) {
 	const router = useRouter();
 	const { storeName } = useStoreConfig();
 	const { openCart } = useCart();
@@ -76,8 +81,28 @@ export function MenuSheetFixed({ items }: MenuSheetProps) {
 		requestAnimationFrame(() => openCart());
 	}, [openCart]);
 
-	const featuredCollections = useMemo(() => collections.slice(0, 8), [collections]);
-	const featuredPages = useMemo(() => pages.slice(0, 6), [pages]);
+	// Determine which layout to render based on strategy
+	const renderLayout = () => {
+		const layoutProps = {
+			menuItems: items,
+			collections,
+			pages,
+			onNavigate: handleNavigate,
+		};
+
+		switch (strategy.size) {
+			case "minimal":
+				return <MinimalLayout {...layoutProps} />;
+			case "small":
+				return <SmallLayout {...layoutProps} />;
+			case "medium":
+				return <MediumLayout {...layoutProps} />;
+			case "large":
+				return <LargeLayout {...layoutProps} />;
+			default:
+				return <SmallLayout {...layoutProps} />;
+		}
+	};
 
 	return (
 		<Sheet onOpenChange={handleOpenChange} open={isOpen}>
@@ -92,14 +117,22 @@ export function MenuSheetFixed({ items }: MenuSheetProps) {
 				</Button>
 			</SheetTrigger>
 			<SheetContent className="flex w-full flex-col p-0 sm:max-w-md" side="left">
-				{/* Header */}
+				{/* Header with Menu Strategy Badge */}
 				<div className="flex items-center justify-between border-border border-b p-4">
 					<div className="flex items-center gap-3">
 						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
 							<Menu className="h-5 w-5 text-primary" />
 						</div>
 						<div>
-							<SheetTitle className="font-semibold text-foreground">{CONTENT.navigation.buttons.menu}</SheetTitle>
+							<SheetTitle className="flex items-center gap-2 font-semibold text-foreground">
+								{CONTENT.navigation.buttons.menu}
+								{strategy.size !== "small" && (
+									<span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 ring-1 ring-primary/20">
+										<Sparkles className="h-3 w-3 text-primary" />
+										<span className="text-primary text-xs capitalize">{strategy.size}</span>
+									</span>
+								)}
+							</SheetTitle>
 							<p className="text-muted-foreground text-xs">{storeName}</p>
 						</div>
 					</div>
@@ -112,114 +145,7 @@ export function MenuSheetFixed({ items }: MenuSheetProps) {
 							<Loader2 className="h-6 w-6 animate-spin" />
 						</div>
 					) : (
-						<div className="space-y-6 p-4">
-							{/* Main Navigation */}
-							{items.length > 0 && (
-								<div className="space-y-2">
-									<h3 className="mb-3 px-2 font-semibold text-muted-foreground text-xs uppercase tracking-wider">
-										Navigation
-									</h3>
-									<div className="space-y-1">
-										{items.map((item) => (
-											<div key={item.id}>
-												<button
-													className="group flex w-full items-center justify-between rounded-lg p-3 transition-colors hover:bg-muted"
-													onClick={() => handleNavigate(item.url)}
-												>
-													<span className="font-medium text-foreground text-sm">{item.title}</span>
-													<ChevronRight className="h-4 w-4 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-foreground" />
-												</button>
-												{/* Render submenu items if they exist */}
-												{item.items && item.items.length > 0 && (
-													<div className="mt-1 ml-4 space-y-1 border-muted-foreground/20 border-l pl-3">
-														{item.items.map((subItem) => (
-															<button
-																className="group flex w-full items-center justify-between rounded-lg p-2 text-left transition-colors hover:bg-muted"
-																key={subItem.id}
-																onClick={() => handleNavigate(subItem.url)}
-															>
-																<span className="text-muted-foreground text-xs">{subItem.title}</span>
-																<ChevronRight className="h-3 w-3 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-foreground" />
-															</button>
-														))}
-													</div>
-												)}
-											</div>
-										))}
-									</div>
-								</div>
-							)}
-
-							{/* Collections */}
-							{featuredCollections.length > 0 && (
-								<div className="space-y-2">
-									<h3 className="mb-3 px-2 font-semibold text-muted-foreground text-xs uppercase tracking-wider">
-										Collections
-									</h3>
-									<div className="space-y-1">
-										{featuredCollections.map((collection) => (
-											<button
-												className="group flex w-full items-center gap-3 rounded-lg p-3 transition-colors hover:bg-muted"
-												key={collection.id}
-												onClick={() => handleNavigate(`/collections/${collection.handle}`)}
-											>
-												<div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted">
-													{collection.image?.url ? (
-														<Image
-															alt={collection.title}
-															className="h-full w-full object-cover"
-															height={48}
-															src={collection.image.url}
-															width={48}
-														/>
-													) : (
-														<div className="flex h-full w-full items-center justify-center">
-															<Package className="h-5 w-5 text-muted-foreground" />
-														</div>
-													)}
-												</div>
-												<div className="min-w-0 flex-1 text-left">
-													<p className="truncate font-medium text-foreground text-sm">{collection.title}</p>
-													<p className="text-muted-foreground text-xs">
-														{collection.products?.productsCount ?? collection.products?.nodes?.length ?? 0} products
-													</p>
-												</div>
-												<ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-foreground" />
-											</button>
-										))}
-									</div>
-								</div>
-							)}
-
-							{/* Pages */}
-							{featuredPages.length > 0 && (
-								<div className="space-y-2">
-									<h3 className="mb-3 px-2 font-semibold text-muted-foreground text-xs uppercase tracking-wider">
-										Information
-									</h3>
-									<div className="space-y-1">
-										{featuredPages.map((page) => (
-											<button
-												className="group flex w-full items-center gap-3 rounded-lg p-3 transition-colors hover:bg-muted"
-												key={page.id}
-												onClick={() => handleNavigate(buildPageUrl(page))}
-											>
-												<div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-primary/10">
-													<BookOpen className="h-4 w-4 text-primary" />
-												</div>
-												<div className="min-w-0 flex-1 text-left">
-													<p className="truncate font-medium text-foreground text-sm">{page.title}</p>
-													{page.bodySummary && (
-														<p className="line-clamp-1 text-muted-foreground text-xs">{page.bodySummary}</p>
-													)}
-												</div>
-												<ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-foreground" />
-											</button>
-										))}
-									</div>
-								</div>
-							)}
-						</div>
+						<div className="p-4">{renderLayout()}</div>
 					)}
 				</ScrollArea>
 

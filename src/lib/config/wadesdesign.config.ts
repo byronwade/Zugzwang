@@ -515,14 +515,14 @@ export const CONTENT = {
 			},
 			collections: {
 				title: "Shop by Category",
-				subtitle: "Explore our curated collections of premium cultivation supplies",
+				subtitle: "Explore our curated collections of premium quality products",
 			},
 		},
 	},
 
 	// Product pages
 	product: {
-		defaultFallback: "Premium mushroom growing supplies for serious cultivators.",
+		defaultFallback: "Premium quality products for discerning customers.",
 		stockStatus: {
 			inStock: "In stock • Ships within 24 hours",
 			lowStock: "Only {count} left in stock",
@@ -544,10 +544,10 @@ export const CONTENT = {
 	collection: {
 		allProducts: {
 			title: "All Products",
-			description: "Browse our complete collection of premium mushroom growing supplies and equipment.",
+			description: "Browse our complete collection of premium quality products and equipment.",
 		},
-		fallbackDescription: "Browse our {collection} collection of premium mushroom growing supplies.",
-		defaultSuffix: "Premium Mushroom Growing Supplies",
+		fallbackDescription: "Browse our {collection} collection of premium quality products.",
+		defaultSuffix: "Premium Quality Products",
 	},
 
 	// Error pages
@@ -560,7 +560,7 @@ export const CONTENT = {
 		productNotFound: {
 			title: "Product Not Found",
 			message:
-				"The requested product could not be found. Browse our available mushroom cultivation supplies or search for something specific.",
+				"The requested product could not be found. Browse our available products or search for something specific.",
 			cta: "Browse Products",
 		},
 		collectionNotFound: {
@@ -585,7 +585,7 @@ export const CONTENT = {
 		},
 		register: {
 			title: "Create Your Account",
-			subtitle: "Join thousands of successful mushroom cultivators.",
+			subtitle: "Join thousands of satisfied customers.",
 			cta: "Create Account",
 			alternateAction: "Already have an account? Sign in",
 		},
@@ -649,9 +649,9 @@ export const FAQ_TEMPLATES = {
 	// Homepage FAQs
 	homepage: [
 		{
-			question: "What types of mushroom growing supplies do you offer?",
+			question: "What types of products do you offer?",
 			answer:
-				"We offer a complete range of mushroom cultivation supplies including growing kits, sterilized substrates, liquid cultures, spawn, cultivation equipment, and educational resources for both beginners and commercial growers.",
+				"We offer a complete range of quality products including beginner-friendly kits, premium materials, professional equipment, and educational resources for both hobbyists and professional users.",
 		},
 		{
 			question: "Do you offer free shipping?",
@@ -664,9 +664,9 @@ export const FAQ_TEMPLATES = {
 				"We offer a 30-day satisfaction guarantee on all products. If you're not completely satisfied with your purchase, contact our support team for a full refund or replacement.",
 		},
 		{
-			question: "How do I get started with mushroom cultivation?",
+			question: "How do I get started?",
 			answer:
-				"We recommend starting with one of our beginner-friendly growing kits that include everything you need. We also provide free growing guides and expert support to help ensure your success.",
+				"We recommend starting with one of our beginner-friendly kits that include everything you need. We also provide free guides and expert support to help ensure your success.",
 		},
 		{
 			question: "Do you ship internationally?",
@@ -680,7 +680,7 @@ export const FAQ_TEMPLATES = {
 		{
 			question: "What is included with this product?",
 			answer:
-				"This product includes everything you need for successful mushroom cultivation. Check the product details for specific contents.",
+				"This product includes everything you need for successful use. Check the product details for specific contents and specifications.",
 		},
 		{
 			question: "How long does shipping take?",
@@ -699,91 +699,23 @@ export const FAQ_TEMPLATES = {
 		},
 	],
 
-	// Collection-specific FAQs
+	// Collection-specific FAQs (generic examples - customize per store)
 	collections: {
-		substrate: [
+		general: [
 			{
-				question: "What kind of mushrooms can I grow with this substrate?",
+				question: "Are your products suitable for beginners?",
 				answer:
-					"Our substrates are formulated to support a wide variety of gourmet and medicinal mushrooms, including oyster, shiitake, lion's mane, and reishi varieties. Check each product description for specific compatibility details.",
+					"Yes! Our products are designed with all skill levels in mind and include detailed step-by-step instructions. They require minimal setup and are perfect for first-time users.",
 			},
 			{
-				question: "How should I store the substrate before use?",
+				question: "What warranty or guarantee comes with your products?",
 				answer:
-					"Store your substrate in a cool, dry place away from direct sunlight. Unopened substrate bags can typically be stored for 3-6 months when kept in proper conditions.",
+					"All products come with our standard 1-year warranty against manufacturing defects. We also offer a 30-day satisfaction guarantee on all purchases.",
 			},
 			{
-				question: "Do I need to pasteurize or sterilize the substrate before use?",
-				answer:
-					"Our substrates come fully pasteurized and ready to use. Simply open in a clean environment and proceed with inoculation according to the included instructions.",
-			},
-		],
-		kit: [
-			{
-				question: "Are your growing kits suitable for beginners?",
-				answer:
-					"Yes! Our kits are designed with beginners in mind and include detailed step-by-step instructions. They require minimal setup and maintenance, making them perfect for first-time growers.",
-			},
-			{
-				question: "How long until I see mushrooms with a growing kit?",
-				answer:
-					"Most of our kits will produce their first flush of mushrooms within 10-14 days after setting up, depending on environmental conditions and the mushroom variety.",
-			},
-			{
-				question: "What temperature and humidity levels are required?",
-				answer:
-					"Most mushroom varieties prefer temperatures between 65-75°F (18-24°C) and humidity levels of 80-95%. Each kit includes specific instructions for the particular mushroom variety.",
-			},
-		],
-		equipment: [
-			{
-				question: "What equipment is essential for mushroom cultivation?",
-				answer:
-					"Essential equipment includes grow bags or containers, a spray bottle for misting, thermometer/hygrometer for monitoring conditions, and proper lighting. Advanced growers may also use pressure cookers, flow hoods, and humidity controllers.",
-			},
-			{
-				question: "Is this equipment suitable for commercial growing?",
-				answer:
-					"Yes! Our equipment is suitable for both home hobbyists and commercial operations. We offer bulk pricing on larger orders - contact our sales team for volume discounts.",
-			},
-			{
-				question: "What warranty or guarantee comes with the equipment?",
-				answer:
-					"All equipment comes with our standard 1-year warranty against manufacturing defects. We also offer a 30-day satisfaction guarantee on all purchases.",
-			},
-		],
-		spawn: [
-			{
-				question: "How long does spawn stay viable?",
-				answer:
-					"When stored properly in a refrigerator (35-40°F), our spawn remains viable for 3-6 months. For best results, use spawn as soon as possible after receiving.",
-			},
-			{
-				question: "What is the inoculation rate for spawn?",
-				answer:
-					"We recommend a 5-10% spawn-to-substrate ratio by weight for optimal colonization. Higher rates lead to faster colonization but use more spawn.",
-			},
-			{
-				question: "Can I use this spawn with any substrate?",
-				answer:
-					"Our spawn works with a variety of substrates including hardwood sawdust, straw, and supplemented blends. Check the product description for specific substrate compatibility.",
-			},
-		],
-		supplies: [
-			{
-				question: "Are these supplies food-safe and non-toxic?",
-				answer:
-					"Yes! All our growing supplies are food-safe and specifically formulated for edible mushroom cultivation. They contain no harmful chemicals or additives.",
-			},
-			{
-				question: "Do you offer bulk pricing on supplies?",
+				question: "Do you offer bulk pricing?",
 				answer:
 					"Absolutely! Orders over $150 receive automatic volume discounts, and we offer special wholesale pricing for commercial operations. Contact us for custom quotes on large orders.",
-			},
-			{
-				question: "What's the shelf life of your supplies?",
-				answer:
-					"When stored properly in a cool, dry location, most supplies remain effective for 6-12 months. Specific shelf life varies by product - check individual product pages for details.",
 			},
 		],
 	},
@@ -993,9 +925,9 @@ export const SCHEMA_DEFAULTS = {
 	catalog: {
 		name: "Product Catalog",
 		categories: [
-			{ name: "Mushroom Growing Kits", category: "Growing Kits" },
-			{ name: "Cultivation Supplies", category: "Supplies" },
-			{ name: "Substrates & Media", category: "Substrates" },
+			{ name: "Starter Kits", category: "Kits" },
+			{ name: "Essential Supplies", category: "Supplies" },
+			{ name: "Materials & Media", category: "Materials" },
 			{ name: "Equipment & Tools", category: "Equipment" },
 		],
 	},

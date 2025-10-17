@@ -23,15 +23,22 @@ const getHeaderData = unstable_cache(
 	async () => {
 		try {
 			const startTime = performance.now();
-			const menuItems = await getMenuItems();
+			// Get menu data with strategy analysis
+			const { getMenuData } = await import("./menu-items");
+			const menuData = await getMenuData();
 
 			const duration = performance.now() - startTime;
 			if (duration > 100) {
 			}
 
-			return { menuItems };
+			return { menuItems: menuData.items, strategy: menuData.strategy };
 		} catch (_error) {
-			return { menuItems: [] };
+			// Fallback with default strategy
+			const { analyzeMenuStructure } = await import("@/lib/utils/menu-analyzer");
+			return {
+				menuItems: [],
+				strategy: analyzeMenuStructure(0, 0, 0, false),
+			};
 		}
 	},
 	["header-data"],
@@ -83,7 +90,13 @@ async function HeaderContent() {
 	// Get data in parallel
 	const [headerData, isAuthenticated] = await Promise.all([getHeaderData(), checkAuthStatus()]);
 
-	return <HeaderClient initialMenuItems={headerData.menuItems} isAuthenticated={isAuthenticated} />;
+	return (
+		<HeaderClient
+			initialMenuItems={headerData.menuItems}
+			isAuthenticated={isAuthenticated}
+			menuStrategy={headerData.strategy}
+		/>
+	);
 }
 
 // Loading component with skeleton UI
