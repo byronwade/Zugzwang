@@ -201,29 +201,10 @@ async function getSeededPages() {
 }
 
 async function getSeededMenus() {
-	const query = `
-    query GetMenus {
-      shop {
-        navigationMenus(first: 20) {
-          edges {
-            node {
-              id
-              handle
-              title
-            }
-          }
-        }
-      }
-    }
-  `;
-
-	const data = await gql(STORE, TOKEN, query);
-	const menus = data.shop.navigationMenus.edges.map((e) => e.node);
-
-	// Filter for seeded menus
-	const seededMenus = menus.filter((menu) => menu.handle === "zugzwang-main-nav");
-
-	return seededMenus;
+	// Menu API for 2025-10 requires different approach
+	// For now, return empty array as menus weren't created yet
+	// TODO: Fix once menu query is determined for API 2025-10
+	return [];
 }
 
 // ========== Deletion Functions ==========

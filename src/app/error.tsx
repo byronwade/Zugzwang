@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 
 const errorMessages = [
-	"Our mycelium network got tangled",
-	"Something spore-adic happened",
-	"The cultivation process hit a snag",
-	"Our fungi network needs a moment",
+	"Something unexpected happened",
+	"We encountered a technical hiccup",
+	"Our system hit a snag",
+	"We're experiencing a temporary issue",
 ];
 
 const getRandomMessage = () => errorMessages[Math.floor(Math.random() * errorMessages.length)];
@@ -33,12 +33,12 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
 		<div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
 			{/* Full-screen Background Image */}
 			<Image
-				alt="Mystical mushrooms"
+				alt="Error Background"
 				className="object-cover"
 				fill
 				priority
 				quality={90}
-				src="https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?w=1920&q=80"
+				src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80"
 			/>
 
 			{/* Dark Gradient Overlay */}
@@ -53,7 +53,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
 					<p className="text-2xl text-white/90 sm:text-3xl">{humorousMessage}</p>
 
 					<p className="mx-auto max-w-md text-lg text-white/70">
-						Don't worry, we're cultivating a solution. Our team has been notified.
+						Don't worry, we're working on a solution. Our team has been notified.
 					</p>
 
 					{/* Technical Details (Development only) */}
@@ -104,7 +104,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
 					__html: JSON.stringify({
 						"@context": "https://schema.org",
 						"@type": "WebPage",
-						name: "Application Error - Zugzology",
+						name: "Application Error - Zugzwang",
 						description: "An unexpected error occurred.",
 						mainEntity: {
 							"@type": "ErrorPage",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ShopifyProduct } from "@/lib/types";
 import {
 	applyFilters,
@@ -24,6 +24,12 @@ export function useProductFiltering(products: ShopifyProduct[]) {
 
 	// Initialize filters from URL or defaults
 	const [filters, setFilters] = useState<FilterState>(() => deserializeFilters(searchParams, defaultFilters));
+
+	// Sync filters with URL changes - this makes real-time filtering work
+	useEffect(() => {
+		const newFilters = deserializeFilters(searchParams, defaultFilters);
+		setFilters(newFilters);
+	}, [searchParams, defaultFilters]);
 
 	// Apply filters to products
 	const filteredProducts = useMemo(() => applyFilters(products, filters), [products, filters]);

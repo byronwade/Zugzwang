@@ -20,6 +20,24 @@ export default function WishlistContent() {
 				// Batch fetch all products in a single request
 				const products = await fetchWishlistProducts(wishlist);
 				setWishlistProducts(products);
+
+				// Clean up invalid wishlist items (products that no longer exist)
+				if (products.length < wishlist.length) {
+					const validHandles = products.map((p) => p.handle);
+					const invalidHandles = wishlist.filter((handle) => !validHandles.includes(handle));
+
+					// Remove invalid items
+					for (const handle of invalidHandles) {
+						removeFromWishlist(handle);
+					}
+
+					if (invalidHandles.length > 0) {
+						toast.info("Wishlist cleaned up", {
+							description: `Removed ${invalidHandles.length} unavailable product${invalidHandles.length > 1 ? "s" : ""}`,
+							duration: 3000,
+						});
+					}
+				}
 			} catch (_error) {
 				toast.error("Failed to load wishlist products");
 			} finally {
@@ -28,7 +46,7 @@ export default function WishlistContent() {
 		};
 
 		loadWishlistProducts();
-	}, [wishlist]);
+	}, [wishlist, removeFromWishlist]);
 
 	// Track wishlist analytics
 	useEffect(() => {

@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import { Suspense } from "react";
 import { ProductCard } from "@/components/features/products/product-card";
-import { HeroVideoCinematic } from "@/components/sections/hero-video-cinematic";
+import { HeroProductCarousel } from "@/components/sections/hero-product-carousel";
 import { Button } from "@/components/ui/button";
 import { PrefetchLink } from "@/components/ui/prefetch-link";
 import { getSiteSettings } from "@/lib/api/shopify/actions";
@@ -113,8 +113,8 @@ async function fetchHomePageData(): Promise<HomePageData> {
 
 	return {
 		site: {
-			name: siteSettings?.name || "Zugzology",
-			description: siteSettings?.description || "Shop curated mushroom cultivation supplies from Zugzology",
+			name: siteSettings?.name || "Online Store",
+			description: siteSettings?.description || "Shop our curated collection of premium products",
 			url: siteSettings?.primaryDomain?.url?.replace(/\/$/, ""),
 		},
 		heroProduct,
@@ -152,35 +152,26 @@ function hasPurchasableVariant(product: ShopifyProduct): boolean {
 }
 
 export function generateMetadata(): Metadata {
-	const title = "Zugzology - Premium Mushroom Cultivation Supplies | Expert Support & Free Shipping";
+	const title = "Home | Premium Quality Products";
 	const description =
-		"Shop curated mushroom cultivation supplies from Zugzology. ✓ Free Shipping Over $75 ✓ Expert Growing Guides ✓ 30-Day Returns ✓ Trusted by 10,000+ Growers. Shop premium mushroom cultivation supplies today!";
+		"Shop our curated collection of premium products. ✓ Fast Shipping ✓ Quality Guaranteed ✓ Easy Returns ✓ Trusted by Thousands. Discover quality products today!";
 
 	return generateSEOMetadata({
 		title,
 		description,
 		keywords: [
-			"mushroom cultivation",
-			"mushroom growing supplies",
-			"mushroom growing kits",
-			"mushroom substrate",
-			"mushroom spawn",
-			"mushroom cultivation equipment",
-			"mycology supplies",
-			"mushroom farming",
-			"grow mushrooms at home",
-			"mushroom growing bags",
-			"sterilized substrate",
-			"liquid culture",
-			"mushroom spores",
-			"oyster mushroom kits",
-			"shiitake growing kits",
-			"Zugzology",
+			"online shopping",
+			"premium products",
+			"quality products",
+			"e-commerce",
+			"online store",
+			"shop online",
+			"fast shipping",
+			"quality guaranteed",
 		],
 		url: "/",
 		openGraph: {
 			type: "website",
-			siteName: "Zugzology",
 		},
 		twitter: {
 			card: "summary_large_image",
@@ -190,7 +181,25 @@ export function generateMetadata(): Metadata {
 
 // Skeleton components for streaming
 function HeroSkeleton() {
-	return <div className="h-screen w-full animate-pulse bg-muted" />;
+	return (
+		<div className="h-[calc(100vh-var(--header-height))] min-h-[500px] w-full bg-background">
+			<div className="grid h-full grid-cols-1 lg:grid-cols-2">
+				{/* Image skeleton */}
+				<div className="flex items-center justify-center bg-muted/30 p-8 lg:p-12">
+					<div className="aspect-square w-full max-w-2xl animate-pulse rounded-2xl bg-muted" />
+				</div>
+				{/* Content skeleton */}
+				<div className="flex items-center p-8 lg:p-12">
+					<div className="w-full max-w-xl space-y-4">
+						<div className="h-6 w-32 animate-pulse rounded bg-muted" />
+						<div className="h-16 w-full animate-pulse rounded bg-muted" />
+						<div className="h-20 w-full animate-pulse rounded bg-muted" />
+						<div className="h-12 w-48 animate-pulse rounded bg-muted" />
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 function ProductGridSkeleton() {
@@ -257,8 +266,16 @@ export default function HomePage() {
 
 // Each section fetches its own data independently - using optimized queries
 async function HeroSection() {
-	const featuredProducts = await fetchOptimizedProducts("RELEVANCE", 3);
-	return <HeroVideoCinematic products={featuredProducts} />;
+	// Fetch more products for carousel variety - mix of featured and best sellers
+	const [featuredProducts, bestSellers] = await Promise.all([
+		fetchOptimizedProducts("RELEVANCE", 5),
+		fetchOptimizedProducts("BEST_SELLING", 3),
+	]);
+
+	// Combine and deduplicate
+	const heroProducts = uniqueById([...featuredProducts, ...bestSellers]).slice(0, 6);
+
+	return <HeroProductCarousel products={heroProducts} />;
 }
 
 async function FeaturedSection() {
@@ -423,7 +440,7 @@ function StructuredData({
 	saleProducts,
 	bestSellingProducts,
 }: StructuredDataProps) {
-	const siteUrl = site.url || "https://zugzology.com";
+	const siteUrl = site.url || "https://example.com";
 
 	// Get comprehensive schemas
 	const organizationSchema = getEnhancedOrganizationSchema();
@@ -434,14 +451,14 @@ function StructuredData({
 	// Common FAQs for home page
 	const homeFAQs = [
 		{
-			question: "What types of mushroom growing supplies do you offer?",
+			question: "What types of products do you offer?",
 			answer:
-				"We offer a complete range of mushroom cultivation supplies including growing kits, sterilized substrates, liquid cultures, spawn, cultivation equipment, and educational resources for both beginners and commercial growers.",
+				"We offer a curated selection of premium quality products. Browse our collections to discover the perfect items for your needs.",
 		},
 		{
 			question: "Do you offer free shipping?",
 			answer:
-				"Yes! We offer free shipping on all orders over $75 within the United States. Orders are typically processed within 1-2 business days.",
+				"Yes! We offer free shipping on qualifying orders. Orders are typically processed within 1-2 business days.",
 		},
 		{
 			question: "What's your return policy?",
@@ -449,9 +466,9 @@ function StructuredData({
 				"We offer a 30-day satisfaction guarantee on all products. If you're not completely satisfied with your purchase, contact our support team for a full refund or replacement.",
 		},
 		{
-			question: "How do I get started with mushroom cultivation?",
+			question: "How do I track my order?",
 			answer:
-				"We recommend starting with one of our beginner-friendly growing kits that include everything you need. We also provide free growing guides and expert support to help ensure your success.",
+				"Once your order ships, you'll receive a tracking number via email. You can also view your order status by logging into your account.",
 		},
 		{
 			question: "Do you ship internationally?",
@@ -469,7 +486,7 @@ function StructuredData({
 		"@type": "WebPage",
 		"@id": `${siteUrl}#webpage`,
 		url: siteUrl,
-		name: `${site.name} - Premium Mushroom Cultivation Supplies`,
+		name: `${site.name} - Premium Quality Products`,
 		description: site.description,
 		inLanguage: "en-US",
 		isPartOf: {

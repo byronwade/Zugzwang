@@ -13,9 +13,9 @@
  * - Custom metafields (rating, featured, specs)
  * - Performance metrics tracking
  * - Smart collections (tag-based auto-population)
- * - Content pages
+ * - Content pages (automatically visible in Storefront API)
  * - Nested navigation menu
- * - Bulk publish to Online Store
+ * - Bulk publish products and collections to Online Store
  *
  * Usage:
  *   PRODUCT_COUNT=1000 node scripts/seed-shopify-products.mjs
@@ -273,8 +273,7 @@ async function createPage({ title, handle, bodyHtml }) {
 		page: {
 			title,
 			handle,
-			bodyHtml,
-			published: true,
+			body: bodyHtml, // API 2025-10 uses 'body' instead of 'bodyHtml'
 		},
 	};
 
@@ -434,14 +433,18 @@ async function getOnlineStorePublicationId() {
 	return online.id;
 }
 
-function buildPublishJsonl({ productIds, collectionIds, publicationId }) {
+function buildPublishJsonl({ productIds, collectionIds, pageIds, publicationId }) {
 	const lineFor = (gid) =>
 		JSON.stringify({
 			id: gid,
 			input: [{ publicationId }],
 		});
 
-	const lines = [...productIds.map(lineFor), ...collectionIds.map(lineFor)];
+	const lines = [
+		...productIds.map(lineFor),
+		...collectionIds.map(lineFor),
+		...pageIds.map(lineFor),
+	];
 
 	return lines.join("\n") + "\n";
 }
@@ -461,6 +464,7 @@ async function main() {
 
 		// Step 2: Create pages
 		const pagesMap = await createAllPages();
+		const allPageIds = Object.values(pagesMap).map((p) => p.id);
 
 		// Step 3: Build product JSONL
 		const productsJsonl = buildProductJSONL(PRODUCT_COUNT);
@@ -527,6 +531,7 @@ async function main() {
 		const publishJsonl = buildPublishJsonl({
 			productIds,
 			collectionIds: allCollectionIds,
+			pageIds: allPageIds,
 			publicationId,
 		});
 		await fs.writeFile("publish.jsonl", publishJsonl, "utf8");
@@ -547,6 +552,7 @@ async function main() {
             __typename
             ... on Product { id }
             ... on Collection { id }
+            ... on Page { id }
           }
           userErrors { field message }
         }

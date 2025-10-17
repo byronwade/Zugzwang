@@ -3,7 +3,6 @@
 import { unstable_cache } from "next/cache";
 import { cookies, headers } from "next/headers";
 import { Suspense } from "react";
-import { getAllBlogPosts } from "@/lib/actions/shopify";
 import { AUTH_CONFIG, logAuthEvent } from "@/lib/config/auth";
 import { HeaderClient } from "./header-client";
 import { getMenuItems } from "./menu-items";
@@ -24,15 +23,15 @@ const getHeaderData = unstable_cache(
 	async () => {
 		try {
 			const startTime = performance.now();
-			const [menuItems, blogs] = await Promise.all([getMenuItems(), getAllBlogPosts()]);
+			const menuItems = await getMenuItems();
 
 			const duration = performance.now() - startTime;
 			if (duration > 100) {
 			}
 
-			return { menuItems, blogs };
+			return { menuItems };
 		} catch (_error) {
-			return { menuItems: [], blogs: [] };
+			return { menuItems: [] };
 		}
 	},
 	["header-data"],
@@ -84,9 +83,7 @@ async function HeaderContent() {
 	// Get data in parallel
 	const [headerData, isAuthenticated] = await Promise.all([getHeaderData(), checkAuthStatus()]);
 
-	return (
-		<HeaderClient blogs={headerData.blogs} initialMenuItems={headerData.menuItems} isAuthenticated={isAuthenticated} />
-	);
+	return <HeaderClient initialMenuItems={headerData.menuItems} isAuthenticated={isAuthenticated} />;
 }
 
 // Loading component with skeleton UI

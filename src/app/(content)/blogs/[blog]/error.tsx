@@ -8,8 +8,8 @@ import { Link } from "@/components/ui/link";
 
 const blogErrorMessages = [
 	"Our knowledge base needs a moment",
-	"The mycelial wisdom network got tangled",
-	"This article is taking a cultivation break",
+	"The content network got tangled",
+	"This article is taking a break",
 	"Unable to load article content",
 ];
 
@@ -36,12 +36,12 @@ export default function BlogError({ error, reset }: BlogErrorProps) {
 		<div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
 			{/* Full-screen Background Image */}
 			<Image
-				alt="Mushroom in forest"
+				alt="Blog Error Background"
 				className="object-cover"
 				fill
 				priority
 				quality={90}
-				src="https://images.unsplash.com/photo-1518534270498-155ba742fc44?w=1920&q=80"
+				src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80"
 			/>
 
 			{/* Dark Gradient Overlay */}
@@ -103,7 +103,7 @@ export default function BlogError({ error, reset }: BlogErrorProps) {
 					__html: JSON.stringify({
 						"@context": "https://schema.org",
 						"@type": "WebPage",
-						name: "Blog Error - Zugzology",
+						name: "Blog Error - Zugzwang",
 						description: "An error occurred while loading this blog article.",
 						mainEntity: {
 							"@type": "ErrorPage",

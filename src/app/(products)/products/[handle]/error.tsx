@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 
 const productErrorMessages = [
-	"Our spore network hit a snag",
-	"The cultivation data needs a moment",
+	"Our system hit a snag",
+	"The product data needs a moment",
 	"Unable to load product information",
 	"Something went wrong with this product",
 ];
@@ -36,12 +36,12 @@ export default function ProductError({ error, reset }: ProductErrorProps) {
 		<div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
 			{/* Full-screen Background Image */}
 			<Image
-				alt="Mushrooms in nature"
+				alt="Product Error Background"
 				className="object-cover"
 				fill
 				priority
 				quality={90}
-				src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1920&q=80"
+				src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80"
 			/>
 
 			{/* Dark Gradient Overlay */}
@@ -126,7 +126,7 @@ export default function ProductError({ error, reset }: ProductErrorProps) {
 					__html: JSON.stringify({
 						"@context": "https://schema.org",
 						"@type": "WebPage",
-						name: "Product Loading Error - Zugzology",
+						name: "Product Loading Error - Zugzwang",
 						description: "Unable to load product information.",
 						mainEntity: {
 							"@type": "ErrorPage",

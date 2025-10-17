@@ -9,9 +9,9 @@ import { Link } from "@/components/ui/link";
 
 const blogNotFoundMessages = [
 	"This article wandered off the path",
-	"Can't find this spore in our library",
-	"This post is still incubating",
-	"Article not found in our cultivation",
+	"Can't find this post in our library",
+	"This post is still being written",
+	"Article not found in our system",
 ];
 
 export default function BlogNotFound() {
@@ -41,12 +41,12 @@ export default function BlogNotFound() {
 		<div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
 			{/* Full-screen Background Image */}
 			<Image
-				alt="Mushroom on wood"
+				alt="Blog Not Found Background"
 				className="object-cover"
 				fill
 				priority
 				quality={90}
-				src="https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=1920&q=80"
+				src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=80"
 			/>
 
 			{/* Dark Gradient Overlay */}
@@ -60,7 +60,7 @@ export default function BlogNotFound() {
 					<p className="text-2xl text-white/90 sm:text-3xl">{funnyMessage}</p>
 
 					<p className="mx-auto max-w-md text-lg text-white/70">
-						The blog post you're looking for might have been moved or is still being cultivated by our content team.
+						The blog post you're looking for might have been moved or is still being written by our content team.
 					</p>
 				</div>
 
@@ -114,7 +114,7 @@ export default function BlogNotFound() {
 					__html: JSON.stringify({
 						"@context": "https://schema.org",
 						"@type": "WebPage",
-						name: "Blog Post Not Found - Zugzology",
+						name: "Blog Post Not Found - Zugzwang",
 						description: "The requested blog post could not be found.",
 						mainEntity: {
 							"@type": "ErrorPage",

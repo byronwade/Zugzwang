@@ -4,8 +4,8 @@
  * Fetches store configuration from Shopify API and admin settings.
  * This replaces all hardcoded values with dynamic data from Shopify.
  */
+"use cache";
 
-import { cache } from "react";
 import { getDefaultStoreConfig, getStoreConfig, type StoreConfig, setStoreConfig } from "./store-config";
 
 /**
@@ -61,7 +61,7 @@ const SHOP_QUERY = `
 /**
  * Load store configuration from Shopify API
  */
-export const loadStoreConfiguration = cache(async (): Promise<StoreConfig> => {
+export async function loadStoreConfiguration(): Promise<StoreConfig> {
 	try {
 		const storeDomain = process.env.SHOPIFY_STORE_DOMAIN;
 		const storefrontToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
@@ -122,6 +122,21 @@ export const loadStoreConfiguration = cache(async (): Promise<StoreConfig> => {
 				faviconUrl: shop.brand?.logo?.image?.url, // Use logo as favicon fallback
 			},
 
+			contact: {
+				supportEmail: "support@example.com",
+				salesEmail: "sales@example.com",
+				phone: "+1 (555) 000-0000",
+			},
+
+			social: {
+				facebook: undefined,
+				instagram: undefined,
+				twitter: undefined,
+				youtube: undefined,
+				pinterest: undefined,
+				linkedin: undefined,
+			},
+
 			navigation: {
 				mainMenu: "main-menu", // Default, can be configured via metafields
 				footerMenu: "footer",
@@ -165,7 +180,7 @@ export const loadStoreConfiguration = cache(async (): Promise<StoreConfig> => {
 		setStoreConfig(defaultConfig);
 		return defaultConfig;
 	}
-});
+}
 
 /**
  * Extract currency symbol from Shopify money format

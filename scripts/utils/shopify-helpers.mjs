@@ -507,24 +507,14 @@ function generateVariants(options, basePrice, seed) {
 		// Single option
 		options[0].values.forEach((value, idx) => {
 			const price = (Number(basePrice) + idx * 5).toFixed(2);
+			// Simplified variant for API 2025-10 - only basic fields
 			variants.push({
 				optionValues: [{ optionName: options[0].name, name: value }],
 				price: Number(price),
 				compareAtPrice: Math.random() > 0.7 ? Number(price) * 1.15 : null,
 				sku: `SKU-${seed}-${idx}`,
 				barcode: `${seed}${String(idx).padStart(8, "0")}`,
-				inventoryQuantities: [
-					{
-						availableQuantity: randomInt(0, 500),
-						locationId: "gid://shopify/Location/1", // Default location
-					},
-				],
-				inventoryPolicy: "DENY",
-				requiresShipping: true,
-				weight: Math.random() * 10 + 0.5,
-				weightUnit: "POUNDS",
 				taxable: true,
-				mediaSrc: [generateProductImage(`${value}`, `${seed}-${idx}`)],
 			});
 		});
 	} else if (options.length === 2) {
@@ -533,6 +523,7 @@ function generateVariants(options, basePrice, seed) {
 		options[0].values.forEach((value1) => {
 			options[1].values.forEach((value2) => {
 				const price = (Number(basePrice) + idx * 3).toFixed(2);
+				// Simplified variant for API 2025-10 - only basic fields
 				variants.push({
 					optionValues: [
 						{ optionName: options[0].name, name: value1 },
@@ -542,18 +533,7 @@ function generateVariants(options, basePrice, seed) {
 					compareAtPrice: Math.random() > 0.7 ? Number(price) * 1.15 : null,
 					sku: `SKU-${seed}-${idx}`,
 					barcode: `${seed}${String(idx).padStart(8, "0")}`,
-					inventoryQuantities: [
-						{
-							availableQuantity: randomInt(0, 500),
-							locationId: "gid://shopify/Location/1",
-						},
-					],
-					inventoryPolicy: "DENY",
-					requiresShipping: true,
-					weight: Math.random() * 10 + 0.5,
-					weightUnit: "POUNDS",
 					taxable: true,
-					mediaSrc: [generateProductImage(`${value1} ${value2}`, `${seed}-${idx}`)],
 				});
 				idx++;
 			});

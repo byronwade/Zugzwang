@@ -2,6 +2,13 @@ import { CACHE_TAGS } from "../cache-config";
 import { shopifyFetch } from "../client";
 import type { ShopifyCollectionWithPagination } from "../types";
 
+export type MenuItem = {
+	id: string;
+	title: string;
+	url: string;
+	items?: MenuItem[];
+};
+
 export type ShopifyHeaderResponse = {
 	shop: {
 		name: string;
@@ -11,16 +18,7 @@ export type ShopifyHeaderResponse = {
 		};
 	};
 	menu: {
-		items: Array<{
-			id: string;
-			title: string;
-			url: string;
-			items?: Array<{
-				id: string;
-				title: string;
-				url: string;
-			}>;
-		}>;
+		items: MenuItem[];
 	};
 	blogs: {
 		edges: Array<{
@@ -57,16 +55,7 @@ export type HeaderQueryResponse = {
 		};
 	};
 	menu: {
-		items: Array<{
-			id: string;
-			title: string;
-			url: string;
-			items?: Array<{
-				id: string;
-				title: string;
-				url: string;
-			}>;
-		}>;
+		items: MenuItem[];
 	};
 	blogs: {
 		edges: Array<{
@@ -102,7 +91,7 @@ export type HeaderData = {
 };
 
 export const headerQuery = `
-	query getHeaderData {
+	query getHeaderData($menuHandle: String!) {
 		shop {
 			name
 			description
@@ -110,7 +99,7 @@ export const headerQuery = `
 				url
 			}
 		}
-		menu(handle: "main-menu") {
+		menu(handle: $menuHandle) {
 			items {
 				id
 				title
@@ -119,6 +108,11 @@ export const headerQuery = `
 					id
 					title
 					url
+					items {
+						id
+						title
+						url
+					}
 				}
 			}
 		}
@@ -162,10 +156,21 @@ export const headerQuery = `
 
 export async function getHeaderData(): Promise<HeaderData> {
 	try {
-		const response = await shopifyFetch<HeaderQueryResponse>({
+		// Try zugzwang-main-nav first (seeded menu with all collections)
+		let response = await shopifyFetch<HeaderQueryResponse>({
 			query: headerQuery,
+			variables: { menuHandle: "zugzwang-main-nav" },
 			tags: [CACHE_TAGS.MENU],
 		});
+
+		// If zugzwang menu doesn't exist or has no items, fall back to main-menu
+		if (!response.data?.menu?.items || response.data.menu.items.length === 0) {
+			response = await shopifyFetch<HeaderQueryResponse>({
+				query: headerQuery,
+				variables: { menuHandle: "main-menu" },
+				tags: [CACHE_TAGS.MENU],
+			});
+		}
 
 		if (!response.data) {
 			throw new Error("No data returned from header query");
@@ -173,7 +178,7 @@ export async function getHeaderData(): Promise<HeaderData> {
 
 		return {
 			shop: response.data.shop,
-			menuItems: response.data.menu.items,
+			menuItems: response.data.menu?.items || [],
 			blogs: response.data.blogs.edges.map((edge) => edge.node),
 			collections: response.data.collections.edges.map((edge) => edge.node),
 		};

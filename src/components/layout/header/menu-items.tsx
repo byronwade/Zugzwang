@@ -7,12 +7,18 @@ import { getMenuRobust } from "@/lib/api/shopify/menu-fetcher";
 import { getStoreConfigSafe } from "@/lib/config/store-config";
 import { loadStoreConfiguration } from "@/lib/config/store-data-loader";
 import type { ShopifyMenuItem } from "@/lib/types";
+import { analyzeMenuStructure, type MenuStrategy } from "@/lib/utils/menu-analyzer";
 
 type MenuItem = {
 	id: string;
 	title: string;
 	url: string;
 	items?: MenuItem[];
+};
+
+export type MenuData = {
+	items: MenuItem[];
+	strategy: MenuStrategy;
 };
 
 type MainMenuResponse = {
@@ -75,9 +81,15 @@ export const getMenuItems = cache(async (): Promise<MenuItem[]> => {
 	try {
 		await loadStoreConfiguration();
 		const config = getStoreConfigSafe();
-		const mainMenuHandle = config.navigation?.mainMenu || "main-menu";
 
-		const menuItems = await getMenuRobust(mainMenuHandle);
+		// Try zugzwang-main-nav first (seeded menu with all collections)
+		let menuItems = await getMenuRobust("zugzwang-main-nav");
+
+		// If not found, try configured menu or default
+		if (!menuItems || menuItems.length === 0) {
+			const mainMenuHandle = config.navigation?.mainMenu || "main-menu";
+			menuItems = await getMenuRobust(mainMenuHandle);
+		}
 
 		// If we have menu items from Shopify, use them
 		if (menuItems && menuItems.length > 0) {

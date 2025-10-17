@@ -10,10 +10,10 @@ import { Link } from "@/components/ui/link";
 import type { ShopifyProduct } from "@/lib/types";
 
 const funnyMessages = [
-	"This page is more elusive than a rare morel",
-	"Lost in the mycelium network",
-	"This spore hasn't landed yet",
-	"Wandered off the cultivation path",
+	"Oops! This page doesn't exist",
+	"Lost in cyberspace",
+	"Page not found in our system",
+	"Looks like you took a wrong turn",
 ];
 
 function NotFoundContent() {
@@ -58,12 +58,12 @@ function NotFoundContent() {
 		<div className="relative flex min-h-screen w-full flex-col overflow-hidden">
 			{/* Full-screen Background Image */}
 			<Image
-				alt="Beautiful mushrooms"
+				alt="404 Background"
 				className="object-cover"
 				fill
 				priority
 				quality={90}
-				src="https://images.unsplash.com/photo-1509773896068-7fd415d91e2e?w=1920&q=80"
+				src="https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=80"
 				unoptimized={process.env.NODE_ENV === "development"}
 			/>
 
@@ -93,7 +93,7 @@ function NotFoundContent() {
 									<Input
 										className="border-white/20 bg-white/10 py-6 pl-12 text-white backdrop-blur-sm placeholder:text-white/40 focus:border-white/30 focus:bg-white/15"
 										onChange={(e) => setSearchQuery(e.target.value)}
-										placeholder="Search for mushroom supplies..."
+										placeholder="Search products..."
 										type="search"
 										value={searchQuery}
 									/>
@@ -139,7 +139,7 @@ function NotFoundContent() {
 						<div className="container mx-auto max-w-7xl">
 							<div className="mb-8 text-center">
 								<h2 className="mb-2 font-bold text-2xl text-white">Popular Products</h2>
-								<p className="text-white/60">Explore our mushroom growing supplies</p>
+								<p className="text-white/60">Explore our product collection</p>
 							</div>
 
 							{isLoading ? (
@@ -176,7 +176,7 @@ function NotFoundContent() {
 					__html: JSON.stringify({
 						"@context": "https://schema.org",
 						"@type": "WebPage",
-						name: "Page Not Found - 404 | Zugzology",
+						name: "Page Not Found - 404 | Zugzwang",
 						description: "The requested page could not be found.",
 						mainEntity: {
 							"@type": "ErrorPage",

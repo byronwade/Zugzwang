@@ -10,10 +10,10 @@ import { Link } from "@/components/ui/link";
 import type { ShopifyProduct } from "@/lib/types";
 
 const productNotFoundMessages = [
-	"This mushroom isn't in our forest anymore",
-	"Product not found in our cultivation",
-	"This spore has moved on",
-	"Can't locate this strain",
+	"This product isn't available anymore",
+	"Product not found in our catalog",
+	"This item has moved on",
+	"Can't locate this product",
 ];
 
 export default function ProductNotFound() {
@@ -62,12 +62,12 @@ export default function ProductNotFound() {
 		<div className="relative flex min-h-screen w-full flex-col overflow-hidden">
 			{/* Full-screen Background Image */}
 			<Image
-				alt="Delicate mushrooms"
+				alt="Product Not Found Background"
 				className="object-cover"
 				fill
 				priority
 				quality={90}
-				src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?w=1920&q=80"
+				src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80"
 			/>
 
 			{/* Dark Gradient Overlay */}
@@ -84,7 +84,7 @@ export default function ProductNotFound() {
 							<p className="text-2xl text-white/90 sm:text-3xl">{funnyMessage}</p>
 
 							<p className="mx-auto max-w-md text-lg text-white/70">
-								This product may have been discontinued or moved. Explore our other amazing cultivation supplies.
+								This product may have been discontinued or moved. Explore our other amazing products.
 							</p>
 						</div>
 
@@ -139,7 +139,7 @@ export default function ProductNotFound() {
 						<div className="container mx-auto max-w-7xl">
 							<div className="mb-8 text-center">
 								<h2 className="mb-2 font-bold text-2xl text-white">You Might Like These</h2>
-								<p className="text-white/60">Explore our popular mushroom cultivation products</p>
+								<p className="text-white/60">Explore our popular products</p>
 							</div>
 
 							{isLoading ? (
@@ -166,7 +166,7 @@ export default function ProductNotFound() {
 					__html: JSON.stringify({
 						"@context": "https://schema.org",
 						"@type": "WebPage",
-						name: "Product Not Found - Zugzology",
+						name: "Product Not Found - Zugzwang",
 						description: "The requested product could not be found.",
 						mainEntity: {
 							"@type": "ErrorPage",

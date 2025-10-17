@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	BookOpen,
 	Heart,
 	HelpCircle,
 	Keyboard,
@@ -22,7 +21,6 @@ import { SignOutButton } from "@/components/features/auth/sign-out-button";
 import { CartSheet } from "@/components/features/cart/cart-sheet";
 import { SearchDropdown } from "@/components/features/search/search-dropdown";
 import { DynamicAffiliateLinksDropdown } from "@/components/layout/header/affiliate-links-dynamic";
-import { LearnAndGrowMenuFixed } from "@/components/layout/header/learn-and-grow-menu-fixed";
 // import { DynamicPromoBanner } from "@/components/layout/promo-banner-dynamic";
 import { useAuthContext, useSearch } from "@/components/providers";
 import { useCart } from "@/components/providers/cart-provider";
@@ -44,7 +42,6 @@ import { Link } from "@/components/ui/link";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useStoreConfig } from "@/hooks/use-store-config";
 import { CONTENT } from "@/lib/config/wadesdesign.config";
-import type { ShopifyBlog } from "@/lib/types";
 import { MenuSheetFixed } from "./menu-sheet-fixed";
 
 type MenuItem = {
@@ -56,7 +53,6 @@ type MenuItem = {
 
 type HeaderClientProps = {
 	initialMenuItems: MenuItem[];
-	blogs: ShopifyBlog[];
 	isAuthenticated: boolean;
 };
 
@@ -166,7 +162,7 @@ const _SearchBar = memo(function SearchBar({
 	);
 });
 
-export function HeaderClient({ initialMenuItems, blogs, isAuthenticated }: HeaderClientProps) {
+export function HeaderClient({ initialMenuItems, isAuthenticated }: HeaderClientProps) {
 	// 1. Context hooks first
 	const { openCart, cart } = useCart();
 	const { wishlist } = useWishlist();
@@ -422,11 +418,6 @@ export function HeaderClient({ initialMenuItems, blogs, isAuthenticated }: Heade
 
 						{/* Action Buttons - Shopify Admin Style */}
 						<div className="flex flex-shrink-0 items-center gap-2">
-							{/* Learn & Grow Button - Hidden on mobile */}
-							<div className="hidden sm:block">
-								<LearnAndGrowMenuFixed blogs={blogs} />
-							</div>
-
 							{/* Main Action Buttons */}
 							<div className="flex items-center gap-2">
 								{/* Mobile More Menu - Only visible on small screens */}
@@ -445,15 +436,6 @@ export function HeaderClient({ initialMenuItems, blogs, isAuthenticated }: Heade
 										align="end"
 										className="w-[200px] rounded-lg border border-border bg-background p-1 shadow-lg"
 									>
-										{/* Learn & Grow in dropdown on mobile */}
-										<DropdownMenuItem
-											className="rounded-md text-foreground hover:bg-muted focus:bg-muted"
-											onClick={() => router.push("/blogs")}
-										>
-											<BookOpen className="mr-2 h-4 w-4 text-muted-foreground" />
-											{CONTENT.navigation.buttons.learnAndGrow}
-										</DropdownMenuItem>
-
 										{/* Dynamic Affiliated Websites */}
 										<DynamicAffiliateLinksDropdown />
 
