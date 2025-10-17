@@ -1,7 +1,26 @@
 {
-  "name": "zugzology-store",
-  "version": "0.1.0",
-  "private": true,
+  "name": "zugzwang",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A modern, production-ready Next.js 16 + Shopify Storefront template with TypeScript, Tailwind CSS, and full e-commerce functionality",
+  "author": "Byron Wade <byronwade@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byronwade/Zugzwang.git"
+  },
+  "keywords": [
+    "nextjs",
+    "nextjs-16",
+    "shopify",
+    "storefront-api",
+    "ecommerce",
+    "typescript",
+    "tailwind",
+    "react",
+    "template",
+    "starter"
+  ],
   "scripts": {
     "dev": "next dev --turbo -p 3000",
     "dev:legacy": "next dev -p 3000",
@@ -15,7 +34,13 @@
     "type-check": "tsc --noEmit",
     "scan": "next dev --turbo -p 3000 & npx react-scan@latest localhost:3000",
     "dev:node": "next dev --turbo -p 3003",
-    "clean": "rm -rf .next node_modules/.cache"
+    "clean": "rm -rf .next node_modules/.cache",
+    "seed:shopify": "node scripts/seed-shopify-products.mjs",
+    "seed:shopify:small": "PRODUCT_COUNT=100 node scripts/seed-shopify-products.mjs",
+    "seed:shopify:medium": "PRODUCT_COUNT=1000 node scripts/seed-shopify-products.mjs",
+    "seed:shopify:large": "PRODUCT_COUNT=5000 node scripts/seed-shopify-products.mjs",
+    "seed:shopify:xl": "PRODUCT_COUNT=10000 node scripts/seed-shopify-products.mjs",
+    "cleanup:shopify": "node scripts/cleanup-shopify-products.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",

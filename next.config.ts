@@ -73,7 +73,10 @@ const nextConfig: NextConfig = {
 	poweredByHeader: false,
 
 	env: {
-		NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://zugzology.com",
+		// Default to localhost in development, require explicit setting for production
+		NEXT_PUBLIC_SITE_URL:
+			process.env.NEXT_PUBLIC_SITE_URL ||
+			(process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://yourdomain.com"),
 		NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,
 		NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN,
 	},

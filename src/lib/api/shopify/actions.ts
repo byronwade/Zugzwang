@@ -148,7 +148,6 @@ export const getProducts = cache(async () => {
 
 			hasNextPage = data.products.pageInfo.hasNextPage;
 			cursor = data.products.pageInfo.endCursor;
-
 		}
 
 		return allProducts;
@@ -1147,7 +1146,6 @@ const _getCachedProducts = unstable_cache(
 				allProducts = [...allProducts, ...products];
 				hasNextPage = pageInfo.hasNextPage;
 				cursor = pageInfo.endCursor;
-
 			}
 
 			return {

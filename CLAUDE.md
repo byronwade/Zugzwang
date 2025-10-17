@@ -1,6 +1,16 @@
-# CLAUDE.md
+# ZUGZWANG - Next.js 16 + Shopify Storefront Template
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Purpose
+
+**Zugzwang** is an open-source Next.js 16 starter template for building modern Shopify storefronts. It showcases:
+- Latest Next.js 16 features (Turbopack, React Compiler, Partial Prerendering)
+- Production-ready Shopify Storefront API integration
+- Type-safe development with strict TypeScript
+- Configurable theming and branding
+- Dynamic content loading from Shopify metafields
+- Best practices for performance, accessibility, and SEO
 
 ## Essential Commands
 
@@ -27,7 +37,7 @@ npm run clean            # Clean .next and cache directories
 
 ## Architecture Overview
 
-This is a **Next.js 16 (canary) e-commerce storefront** for Zugzology, a premium mushroom growing supplies store. The application is deeply integrated with **Shopify's Storefront API (2024-01)** and **Customer Account OAuth flow**.
+This is **Zugzwang** - a modern, production-ready **Next.js 16 e-commerce storefront template** designed as an open-source starter for any Shopify store. The application is deeply integrated with **Shopify's Storefront API (2024-01)** and **Customer Account OAuth flow**, providing a complete foundation for building high-performance e-commerce experiences.
 
 ### Technology Stack
 

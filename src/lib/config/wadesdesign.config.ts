@@ -1,15 +1,18 @@
 /**
  * ============================================================================
- * WADESDESIGN STORE CONFIGURATION
+ * ZUGZWANG - UNIVERSAL STORE CONFIGURATION
  * ============================================================================
  *
- * This file centralizes ALL hardcoded content for the storefront.
- * Change your store's branding, copy, and settings in ONE place.
+ * This file provides configuration defaults for the Zugzwang template.
  *
- * To customize for a different store:
- * 1. Update the values below
- * 2. Replace images in /public folder
- * 3. That's it! No code changes needed.
+ * IMPORTANT: Many values below should be replaced with:
+ * - Environment variables (NEXT_PUBLIC_*)
+ * - Shopify metafields (fetched dynamically)
+ * - Shopify shop data (from Storefront API)
+ *
+ * This file serves as a fallback configuration layer and demonstration
+ * of the template's capabilities. For production use, configure your
+ * store dynamically using the methods above.
  *
  * ============================================================================
  */
@@ -23,19 +26,22 @@ import { BookOpen, HeadphonesIcon, RefreshCw, ShieldCheck, Sprout, Truck } from 
 
 export const BRAND = {
 	// Core brand information
-	name: "Zugzology",
-	legalName: "Zugzology LLC",
-	tagline: "Premium Mushroom Cultivation Supplies",
-	slogan: "From Spore to Harvest",
+	// TODO: Load from process.env.NEXT_PUBLIC_STORE_NAME or Shopify shop.name
+	name: process.env.NEXT_PUBLIC_STORE_NAME || "Zugzwang",
+	legalName: process.env.NEXT_PUBLIC_STORE_LEGAL_NAME || "Your Store LLC",
+	tagline: process.env.NEXT_PUBLIC_STORE_TAGLINE || "Modern E-Commerce Template",
+	slogan: process.env.NEXT_PUBLIC_STORE_SLOGAN || "Built with Next.js & Shopify",
 
 	// Domain configuration
-	domain: "zugzology.com",
-	url: "https://zugzology.com",
+	// TODO: Load from process.env or Shopify domain settings
+	domain: process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, "") || "yourdomain.com",
+	url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com",
 
 	// Visual identity
+	// TODO: Load logo from Shopify shop settings or metafields
 	logo: {
-		path: "/logo.png",
-		alt: "Zugzology Logo",
+		path: process.env.NEXT_PUBLIC_LOGO_PATH || "/logo.png",
+		alt: `${process.env.NEXT_PUBLIC_STORE_NAME || "Zugzwang"} Logo`,
 		width: 180,
 		height: 60,
 	},
@@ -44,21 +50,24 @@ export const BRAND = {
 	},
 
 	// Brand colors
+	// TODO: Load from environment variables or Shopify theme settings
 	colors: {
-		primary: "#2A6592", // Psilocybin Blue
-		secondary: "#C18A3C", // Golden Cap
-		accent: "#EDEBE3", // Mycelium White
+		primary: process.env.NEXT_PUBLIC_PRIMARY_COLOR || "#2563eb", // Blue
+		secondary: process.env.NEXT_PUBLIC_SECONDARY_COLOR || "#7c3aed", // Purple
+		accent: process.env.NEXT_PUBLIC_ACCENT_COLOR || "#f3f4f6", // Gray
 	},
 
 	// Founder information
+	// TODO: Load from Shopify metafields or environment
 	founder: {
-		name: "Byron Wade",
-		title: "CEO & Founder",
+		name: process.env.NEXT_PUBLIC_FOUNDER_NAME || "Store Owner",
+		title: process.env.NEXT_PUBLIC_FOUNDER_TITLE || "Founder",
 	},
 
 	// Company details
-	foundingDate: "2020-01-01",
-	foundingYear: "2020",
+	// TODO: Load from Shopify metafields
+	foundingDate: process.env.NEXT_PUBLIC_FOUNDING_DATE || new Date().toISOString().split("T")[0],
+	foundingYear: process.env.NEXT_PUBLIC_FOUNDING_YEAR || new Date().getFullYear().toString(),
 } as const;
 
 // ============================================================================
@@ -67,48 +76,52 @@ export const BRAND = {
 
 export const BUSINESS = {
 	// Physical address
+	// TODO: Load from Shopify metafields (custom.business_address)
 	address: {
-		street: "123 Cultivation Lane",
-		city: "San Francisco",
-		state: "CA",
-		stateCode: "CA",
-		zip: "94102",
-		country: "United States",
-		countryCode: "US",
+		street: process.env.NEXT_PUBLIC_BUSINESS_STREET || "123 Main Street",
+		city: process.env.NEXT_PUBLIC_BUSINESS_CITY || "San Francisco",
+		state: process.env.NEXT_PUBLIC_BUSINESS_STATE || "CA",
+		stateCode: process.env.NEXT_PUBLIC_BUSINESS_STATE_CODE || "CA",
+		zip: process.env.NEXT_PUBLIC_BUSINESS_ZIP || "94102",
+		country: process.env.NEXT_PUBLIC_BUSINESS_COUNTRY || "United States",
+		countryCode: process.env.NEXT_PUBLIC_BUSINESS_COUNTRY_CODE || "US",
 	},
 
 	// Operating hours (for Schema.org)
+	// TODO: Load from Shopify metafields (custom.business_hours)
 	hours: {
 		weekday: {
 			days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-			opens: "09:00",
-			closes: "17:00",
+			opens: process.env.NEXT_PUBLIC_HOURS_WEEKDAY_OPEN || "09:00",
+			closes: process.env.NEXT_PUBLIC_HOURS_WEEKDAY_CLOSE || "17:00",
 		},
 		saturday: {
 			days: ["Saturday"],
-			opens: "10:00",
-			closes: "16:00",
+			opens: process.env.NEXT_PUBLIC_HOURS_SATURDAY_OPEN || "10:00",
+			closes: process.env.NEXT_PUBLIC_HOURS_SATURDAY_CLOSE || "16:00",
 		},
 		sunday: {
 			days: ["Sunday"],
-			opens: null, // Closed
+			opens: null, // Closed by default
 			closes: null,
 		},
 	},
 
 	// Business metrics (for Schema.org)
+	// TODO: Load from Shopify metafields
 	metrics: {
 		employeeRange: {
-			min: 10,
-			max: 50,
+			min: Number(process.env.NEXT_PUBLIC_EMPLOYEE_MIN) || 1,
+			max: Number(process.env.NEXT_PUBLIC_EMPLOYEE_MAX) || 50,
 		},
-		priceRange: "$$", // $ to $$$$
+		priceRange: process.env.NEXT_PUBLIC_PRICE_RANGE || "$$",
 	},
 
 	// Service areas
+	// TODO: Load from Shopify metafields or market settings
 	serviceAreas: {
-		countries: ["US", "CA"],
-		languages: ["en", "es"],
+		countries: process.env.NEXT_PUBLIC_SERVICE_COUNTRIES?.split(",") || ["US"],
+		languages: process.env.NEXT_PUBLIC_SERVICE_LANGUAGES?.split(",") || ["en"],
 	},
 } as const;
 
@@ -118,27 +131,30 @@ export const BUSINESS = {
 
 export const CONTACT = {
 	// Email addresses
+	// TODO: Load from Shopify metafields (custom.contact_emails)
 	email: {
-		support: "support@zugzology.com",
-		sales: "sales@zugzology.com",
-		general: "hello@zugzology.com",
-		legal: "legal@zugzology.com",
+		support: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@yourdomain.com",
+		sales: process.env.NEXT_PUBLIC_SALES_EMAIL || "sales@yourdomain.com",
+		general: process.env.NEXT_PUBLIC_GENERAL_EMAIL || "hello@yourdomain.com",
+		legal: process.env.NEXT_PUBLIC_LEGAL_EMAIL || "legal@yourdomain.com",
 	},
 
 	// Phone numbers
+	// TODO: Load from Shopify metafields (custom.contact_phones)
 	phone: {
-		main: "1-800-ZUGZOLOGY",
-		mainFormatted: "1-800-984-9656",
-		international: "+1-415-555-0123",
-		tollfree: true,
+		main: process.env.NEXT_PUBLIC_PHONE_MAIN || "1-800-000-0000",
+		mainFormatted: process.env.NEXT_PUBLIC_PHONE_FORMATTED || "1-800-000-0000",
+		international: process.env.NEXT_PUBLIC_PHONE_INTERNATIONAL || "+1-415-555-0000",
+		tollfree: process.env.NEXT_PUBLIC_PHONE_TOLLFREE === "true",
 	},
 
 	// Support options
+	// TODO: Load from Shopify metafields (custom.support_info)
 	support: {
-		hours: "Mon-Fri 9AM-5PM PST",
-		responseTime: "24 hours",
-		languages: ["English", "Spanish"],
-		hearingImpaired: true,
+		hours: process.env.NEXT_PUBLIC_SUPPORT_HOURS || "Mon-Fri 9AM-5PM",
+		responseTime: process.env.NEXT_PUBLIC_SUPPORT_RESPONSE_TIME || "24 hours",
+		languages: process.env.NEXT_PUBLIC_SUPPORT_LANGUAGES?.split(",") || ["English"],
+		hearingImpaired: process.env.NEXT_PUBLIC_SUPPORT_HEARING_IMPAIRED === "true",
 	},
 } as const;
 
@@ -147,19 +163,26 @@ export const CONTACT = {
 // ============================================================================
 
 export const SOCIAL = {
-	facebook: "https://www.facebook.com/zugzology",
-	instagram: "https://www.instagram.com/zugzology",
-	twitter: "https://twitter.com/zugzology",
-	youtube: "https://www.youtube.com/@zugzology",
-	linkedin: "https://www.linkedin.com/company/zugzology",
-	pinterest: "https://www.pinterest.com/zugzology",
-	tiktok: "https://www.tiktok.com/@zugzology",
+	// TODO: Load from Shopify metafields (custom.social_links)
+	facebook: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK || "",
+	instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || "",
+	twitter: process.env.NEXT_PUBLIC_SOCIAL_TWITTER || "",
+	youtube: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE || "",
+	linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || "",
+	pinterest: process.env.NEXT_PUBLIC_SOCIAL_PINTEREST || "",
+	tiktok: process.env.NEXT_PUBLIC_SOCIAL_TIKTOK || "",
 
 	// Social handles (without @)
+	// Extract handles from URLs if not provided directly
 	handles: {
-		twitter: "zugzology",
-		instagram: "zugzology",
-		facebook: "zugzology",
+		twitter:
+			process.env.NEXT_PUBLIC_SOCIAL_TWITTER_HANDLE || process.env.NEXT_PUBLIC_SOCIAL_TWITTER?.split("/").pop() || "",
+		instagram:
+			process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM_HANDLE ||
+			process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM?.split("/").pop() ||
+			"",
+		facebook:
+			process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK_HANDLE || process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK?.split("/").pop() || "",
 	},
 } as const;
 
@@ -248,43 +271,43 @@ export const STORE_FEATURES: StoreFeature[] = [
 	{
 		id: "free-shipping",
 		icon: Truck,
-		title: "Free Shipping",
-		description: "Free shipping on all orders over $75",
+		title: process.env.NEXT_PUBLIC_FEATURE_SHIPPING_TITLE || "Free Shipping",
+		description: process.env.NEXT_PUBLIC_FEATURE_SHIPPING_DESC || "Free shipping on qualifying orders",
 		order: 1,
 	},
 	{
 		id: "satisfaction-guarantee",
 		icon: ShieldCheck,
-		title: "Satisfaction Guarantee",
-		description: "30-day money-back guarantee on all products",
+		title: process.env.NEXT_PUBLIC_FEATURE_GUARANTEE_TITLE || "Money-Back Guarantee",
+		description: process.env.NEXT_PUBLIC_FEATURE_GUARANTEE_DESC || "Shop with confidence - satisfaction guaranteed",
 		order: 2,
 	},
 	{
 		id: "sustainable",
 		icon: Sprout,
-		title: "Sustainable Practices",
-		description: "Eco-friendly packaging and growing methods",
+		title: process.env.NEXT_PUBLIC_FEATURE_ECO_TITLE || "Eco-Friendly",
+		description: process.env.NEXT_PUBLIC_FEATURE_ECO_DESC || "Sustainable practices and eco-friendly packaging",
 		order: 3,
 	},
 	{
 		id: "expert-resources",
 		icon: BookOpen,
-		title: "Expert Resources",
-		description: "Free access to our cultivation guides and videos",
+		title: process.env.NEXT_PUBLIC_FEATURE_RESOURCES_TITLE || "Expert Resources",
+		description: process.env.NEXT_PUBLIC_FEATURE_RESOURCES_DESC || "Free guides and educational content",
 		order: 4,
 	},
 	{
 		id: "customer-support",
 		icon: HeadphonesIcon,
-		title: "Customer Support",
-		description: "Dedicated support from experienced growers",
+		title: process.env.NEXT_PUBLIC_FEATURE_SUPPORT_TITLE || "Customer Support",
+		description: process.env.NEXT_PUBLIC_FEATURE_SUPPORT_DESC || "Dedicated support from our team",
 		order: 5,
 	},
 	{
 		id: "subscriptions",
 		icon: RefreshCw,
-		title: "Subscription Options",
-		description: "Save with regular deliveries of your favorites",
+		title: process.env.NEXT_PUBLIC_FEATURE_SUBSCRIPTION_TITLE || "Subscribe & Save",
+		description: process.env.NEXT_PUBLIC_FEATURE_SUBSCRIPTION_DESC || "Save with regular deliveries",
 		order: 6,
 	},
 ];
@@ -295,28 +318,30 @@ export const STORE_FEATURES: StoreFeature[] = [
 
 export const INDUSTRY = {
 	// Industry type
-	type: "Mushroom Cultivation",
-	category: "Agriculture & Horticulture",
+	// TODO: Load from Shopify metafields or environment
+	type: process.env.NEXT_PUBLIC_INDUSTRY_TYPE || "E-Commerce",
+	category: process.env.NEXT_PUBLIC_INDUSTRY_CATEGORY || "Retail",
 
-	// Product categories (maps to Shopify collections)
+	// Product categories
+	// NOTE: These should be dynamically loaded from Shopify collections
+	// This is a fallback/example structure
 	categories: [
-		{ handle: "growing-kits", name: "Growing Kits", description: "Complete mushroom growing kits" },
-		{ handle: "substrates", name: "Substrates", description: "Premium growing substrates" },
-		{ handle: "equipment", name: "Equipment", description: "Cultivation equipment" },
-		{ handle: "supplies", name: "Supplies", description: "Growing supplies" },
-		{ handle: "spawn", name: "Spawn", description: "Mushroom spawn" },
-		{ handle: "liquid-culture", name: "Liquid Culture", description: "Liquid cultures" },
-		{ handle: "bulk", name: "Bulk Orders", description: "Bulk quantities" },
+		{ handle: "all", name: "All Products", description: "Browse all products" },
+		{ handle: "featured", name: "Featured", description: "Featured products" },
+		{ handle: "new-arrivals", name: "New Arrivals", description: "Latest products" },
+		{ handle: "best-sellers", name: "Best Sellers", description: "Top-selling products" },
+		{ handle: "sale", name: "Sale", description: "Products on sale" },
 	],
 
-	// Industry-specific terminology
+	// Generic terminology (can be customized per store)
+	// TODO: Load from Shopify metafields (custom.store_terminology)
 	terminology: {
-		mainProduct: "mushroom growing supplies",
-		productPlural: "cultivation supplies",
-		activity: "mushroom cultivation",
-		practitioner: "cultivator",
-		practitioners: "growers",
-		expertise: "mycology",
+		mainProduct: process.env.NEXT_PUBLIC_MAIN_PRODUCT || "products",
+		productPlural: process.env.NEXT_PUBLIC_PRODUCT_PLURAL || "items",
+		activity: process.env.NEXT_PUBLIC_ACTIVITY || "shopping",
+		practitioner: process.env.NEXT_PUBLIC_PRACTITIONER || "customer",
+		practitioners: process.env.NEXT_PUBLIC_PRACTITIONERS || "customers",
+		expertise: process.env.NEXT_PUBLIC_EXPERTISE || "quality",
 	},
 } as const;
 
@@ -326,60 +351,59 @@ export const INDUSTRY = {
 
 export const SEO = {
 	// Site-wide defaults
+	// TODO: Load from Shopify shop data or environment
 	site: {
-		titleTemplate: "%s | Zugzology",
-		defaultTitle: "Zugzology - Premium Mushroom Cultivation Supplies",
+		titleTemplate: `%s | ${process.env.NEXT_PUBLIC_STORE_NAME || "Zugzwang"}`,
+		defaultTitle:
+			process.env.NEXT_PUBLIC_SEO_DEFAULT_TITLE ||
+			`${process.env.NEXT_PUBLIC_STORE_NAME || "Zugzwang"} - Modern E-Commerce`,
 		titleSeparator: " | ",
 	},
 
-	// Default keywords (industry-specific)
-	defaultKeywords: [
-		"mushroom cultivation",
-		"mushroom growing supplies",
-		"mushroom growing kits",
-		"mushroom substrate",
-		"mushroom spawn",
-		"mushroom cultivation equipment",
-		"mycology supplies",
-		"mushroom farming",
-		"grow mushrooms at home",
-		"mushroom growing bags",
-		"sterilized substrate",
-		"liquid culture",
-		"mushroom spores",
-		"oyster mushroom kits",
-		"shiitake growing kits",
+	// Default keywords
+	// TODO: Load from Shopify metafields (custom.seo_keywords) or make product-specific
+	defaultKeywords: process.env.NEXT_PUBLIC_SEO_KEYWORDS?.split(",") || [
+		"online store",
+		"ecommerce",
+		"shop online",
+		"buy online",
+		"quality products",
+		"fast shipping",
+		"secure checkout",
+		"customer reviews",
+		"best prices",
+		"new arrivals",
 	],
 
 	// Page-specific metadata
+	// TODO: Load from Shopify metafields for each page type
 	pages: {
 		home: {
-			title: "Zugzology - Premium Mushroom Cultivation Supplies | Expert Support & Free Shipping",
+			title: process.env.NEXT_PUBLIC_SEO_HOME_TITLE || `${BRAND.name} - ${BRAND.tagline}`,
 			description:
-				"Shop curated mushroom cultivation supplies from Zugzology. ✓ Free Shipping Over $75 ✓ Expert Growing Guides ✓ 30-Day Returns ✓ Trusted by 10,000+ Growers.",
-			keywords: ["mushroom cultivation", "mushroom growing supplies", "mushroom growing kits"],
+				process.env.NEXT_PUBLIC_SEO_HOME_DESC ||
+				`Shop quality products at ${BRAND.name}. Fast shipping, secure checkout, and excellent customer service.`,
+			keywords: process.env.NEXT_PUBLIC_SEO_HOME_KEYWORDS?.split(",") || ["online store", "ecommerce", "shop online"],
 		},
 		products: {
-			title: "All Products - Mushroom Growing Supplies",
-			description:
-				"Discover our complete collection of premium mushroom growing supplies. ✓ 500+ Products ✓ Expert Support ✓ Free Shipping Over $75 ✓ 30-Day Returns.",
-			keywords: ["mushroom growing supplies", "mushroom cultivation equipment", "mushroom substrate"],
+			title: process.env.NEXT_PUBLIC_SEO_PRODUCTS_TITLE || "All Products",
+			description: process.env.NEXT_PUBLIC_SEO_PRODUCTS_DESC || "Discover our complete collection of quality products.",
+			keywords: process.env.NEXT_PUBLIC_SEO_PRODUCTS_KEYWORDS?.split(",") || ["products", "shop", "buy online"],
 		},
 		collections: {
-			titleSuffix: "Collection - Premium Mushroom Growing Supplies",
+			titleSuffix: process.env.NEXT_PUBLIC_SEO_COLLECTION_SUFFIX || `Collection | ${BRAND.name}`,
 			descriptionTemplate:
-				"Discover our premium {collection} collection. High-quality mushroom growing supplies and equipment with fast shipping and expert support.",
+				process.env.NEXT_PUBLIC_SEO_COLLECTION_DESC ||
+				"Discover our premium {collection} collection with fast shipping and expert support.",
 		},
 		productDetail: {
-			titleSuffix: "| Zugzology",
-			notFoundTitle: "Product Not Found | Zugzology",
-			notFoundDescription:
-				"The requested product could not be found. Browse our collection of premium mushroom cultivation supplies.",
+			titleSuffix: `| ${BRAND.name}`,
+			notFoundTitle: `Product Not Found | ${BRAND.name}`,
+			notFoundDescription: "The requested product could not be found. Browse our collection of quality products.",
 		},
 		blog: {
-			title: "Mushroom Cultivation Blog - Growing Guides & Tips",
-			description:
-				"Expert guides, tips, and insights for successful mushroom cultivation. Learn from experienced growers.",
+			title: process.env.NEXT_PUBLIC_SEO_BLOG_TITLE || "Blog - Tips & Guides",
+			description: process.env.NEXT_PUBLIC_SEO_BLOG_DESC || "Expert guides, tips, and insights.",
 		},
 		account: {
 			title: "My Account",
@@ -391,24 +415,26 @@ export const SEO = {
 		},
 		search: {
 			title: "Search Results",
-			descriptionTemplate: 'Find premium mushroom cultivation supplies matching "{query}".',
+			descriptionTemplate: 'Find products matching "{query}".',
 		},
 	},
 
 	// Social/OG defaults
+	// TODO: Load from Shopify shop settings or metafields
 	og: {
 		type: "website",
-		siteName: "Zugzology",
-		image: "/og-image.jpg",
+		siteName: BRAND.name,
+		image: process.env.NEXT_PUBLIC_OG_IMAGE || "/og-image.jpg",
 		imageWidth: 1200,
 		imageHeight: 630,
 	},
 
 	// Twitter card
+	// TODO: Load from Shopify metafields (custom.social_twitter)
 	twitter: {
 		card: "summary_large_image",
-		site: "@zugzology",
-		creator: "@zugzology",
+		site: SOCIAL.handles.twitter ? `@${SOCIAL.handles.twitter}` : "",
+		creator: SOCIAL.handles.twitter ? `@${SOCIAL.handles.twitter}` : "",
 	},
 } as const;
 
@@ -418,27 +444,41 @@ export const SEO = {
 
 export const PROMOTIONS = {
 	// Active promotions
+	// TODO: Load from Shopify metafields (custom.promotions)
 	banners: {
-		enabled: true,
-		messages: ["Free shipping on orders over $75", "New products added weekly", "Expert growing support included"],
-		rotationInterval: 5000, // milliseconds
+		enabled: process.env.NEXT_PUBLIC_PROMO_ENABLED !== "false",
+		messages: process.env.NEXT_PUBLIC_PROMO_MESSAGES?.split("|") || [
+			"Free shipping on qualifying orders",
+			"New products added regularly",
+			"Expert customer support included",
+		],
+		rotationInterval: Number(process.env.NEXT_PUBLIC_PROMO_INTERVAL) || 5000,
 	},
 
 	// Discount tiers
+	// TODO: Load from Shopify automatic discounts or metafields
 	discounts: {
 		volumeDiscounts: [
-			{ threshold: 150, percentage: 5, message: "5% off orders over $150" },
-			{ threshold: 300, percentage: 10, message: "10% off orders over $300" },
-			{ threshold: 500, percentage: 15, message: "15% off orders over $500" },
+			{
+				threshold: Number(process.env.NEXT_PUBLIC_DISCOUNT_TIER1_MIN) || 150,
+				percentage: Number(process.env.NEXT_PUBLIC_DISCOUNT_TIER1_PCT) || 5,
+				message: process.env.NEXT_PUBLIC_DISCOUNT_TIER1_MSG || "5% off orders over $150",
+			},
+			{
+				threshold: Number(process.env.NEXT_PUBLIC_DISCOUNT_TIER2_MIN) || 300,
+				percentage: Number(process.env.NEXT_PUBLIC_DISCOUNT_TIER2_PCT) || 10,
+				message: process.env.NEXT_PUBLIC_DISCOUNT_TIER2_MSG || "10% off orders over $300",
+			},
 		],
 	},
 
 	// Trust indicators
+	// TODO: Load from Shopify metafields (custom.trust_badges) or calculate from order data
 	trustBadges: {
-		customerCount: "10,000+",
-		reviewCount: "2,500+",
-		averageRating: "4.8/5",
-		successRate: "98%",
+		customerCount: process.env.NEXT_PUBLIC_CUSTOMER_COUNT || "1,000+",
+		reviewCount: process.env.NEXT_PUBLIC_REVIEW_COUNT || "500+",
+		averageRating: process.env.NEXT_PUBLIC_AVERAGE_RATING || "4.8/5",
+		successRate: process.env.NEXT_PUBLIC_SUCCESS_RATE || "98%",
 	},
 } as const;
 
@@ -448,13 +488,14 @@ export const PROMOTIONS = {
 
 export const CONTENT = {
 	// Homepage
+	// TODO: Load from Shopify metafields (custom.homepage_content)
 	home: {
 		hero: {
-			defaultTitle: "Premium Mushroom Growing Supplies",
-			defaultSubtitle: "Everything you need for successful mushroom cultivation, from spawn to harvest.",
-			ctaPrimary: "Shop Now",
-			ctaSecondary: "Browse Products",
-			trustBadge: "Free shipping on orders over $50",
+			defaultTitle: process.env.NEXT_PUBLIC_HERO_TITLE || `Welcome to ${BRAND.name}`,
+			defaultSubtitle: process.env.NEXT_PUBLIC_HERO_SUBTITLE || BRAND.tagline,
+			ctaPrimary: process.env.NEXT_PUBLIC_HERO_CTA_PRIMARY || "Shop Now",
+			ctaSecondary: process.env.NEXT_PUBLIC_HERO_CTA_SECONDARY || "Browse Products",
+			trustBadge: process.env.NEXT_PUBLIC_HERO_TRUST_BADGE || PROMOTIONS.banners.messages[0],
 		},
 		sections: {
 			featured: {
@@ -836,7 +877,7 @@ export const NAVIGATION = {
 		sections: [
 			{
 				id: "main",
-				title: "Zugzology",
+				title: BRAND.name,
 				links: [
 					{ label: "About Us", href: "/about" },
 					{ label: "Careers", href: "/careers" },
