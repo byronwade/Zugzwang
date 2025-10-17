@@ -264,21 +264,10 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 		const collectionSchema = getEnhancedCollectionSchema(collection, products);
 		const websiteSchema = getSearchActionSchema();
 
-		// Create FAQ content for specific collection types
-		const faqContent: Array<{ question: string; answer: string }> = [];
-
-		// Add collection-specific FAQs based on the type of collection
-		if (collection.handle.includes("substrate") || collection.title.toLowerCase().includes("substrate")) {
-			faqContent.push(...FAQ_TEMPLATES.collections.substrate);
-		} else if (collection.handle.includes("kit") || collection.title.toLowerCase().includes("kit")) {
-			faqContent.push(...FAQ_TEMPLATES.collections.kit);
-		} else if (collection.handle.includes("equipment") || collection.title.toLowerCase().includes("equipment")) {
-			faqContent.push(...FAQ_TEMPLATES.collections.equipment);
-		} else if (collection.handle.includes("spawn") || collection.title.toLowerCase().includes("spawn")) {
-			faqContent.push(...FAQ_TEMPLATES.collections.spawn);
-		} else if (collection.handle.includes("supplies") || collection.title.toLowerCase().includes("supplies")) {
-			faqContent.push(...FAQ_TEMPLATES.collections.supplies);
-		}
+		// Create FAQ content - use general collection FAQs for all collections
+		const faqContent: Array<{ question: string; answer: string }> = [
+			...FAQ_TEMPLATES.collections.general,
+		];
 
 		// Create the FAQ structured data using enhanced schema
 		let faqSchema = null;

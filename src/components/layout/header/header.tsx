@@ -31,13 +31,20 @@ const getHeaderData = unstable_cache(
 			if (duration > 100) {
 			}
 
-			return { menuItems: menuData.items, strategy: menuData.strategy };
+			return {
+				menuItems: menuData.items,
+				strategy: menuData.strategy,
+				specialCollections: menuData.specialCollections,
+				showAllProducts: menuData.showAllProducts,
+			};
 		} catch (_error) {
 			// Fallback with default strategy
 			const { analyzeMenuStructure } = await import("@/lib/utils/menu-analyzer");
 			return {
 				menuItems: [],
 				strategy: analyzeMenuStructure(0, 0, 0, false),
+				specialCollections: [],
+				showAllProducts: true,
 			};
 		}
 	},
@@ -95,6 +102,8 @@ async function HeaderContent() {
 			initialMenuItems={headerData.menuItems}
 			isAuthenticated={isAuthenticated}
 			menuStrategy={headerData.strategy}
+			specialCollections={headerData.specialCollections}
+			showAllProducts={headerData.showAllProducts}
 		/>
 	);
 }

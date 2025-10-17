@@ -8,6 +8,7 @@ import { getStoreConfigSafe } from "@/lib/config/store-config";
 import { loadStoreConfiguration } from "@/lib/config/store-data-loader";
 import type { ShopifyMenuItem } from "@/lib/types";
 import { analyzeMenuStructure, type MenuStrategy } from "@/lib/utils/menu-analyzer";
+import { detectSpecialCollections, type SpecialCollection } from "@/lib/utils/special-collections-detector";
 
 type MenuItem = {
 	id: string;
@@ -19,6 +20,8 @@ type MenuItem = {
 export type MenuData = {
 	items: MenuItem[];
 	strategy: MenuStrategy;
+	specialCollections: SpecialCollection[]; // Auto-detected featured collections
+	showAllProducts: boolean; // Whether to show "All Products" link
 };
 
 type MainMenuResponse = {
@@ -95,6 +98,34 @@ export const getMenuItems = cache(async (): Promise<MenuItem[]> => {
 	return data.items;
 });
 
+// Filter special collections based on config settings
+function filterSpecialCollectionsByConfig(
+	specialCollections: SpecialCollection[],
+	config: ReturnType<typeof getStoreConfigSafe>
+): SpecialCollection[] {
+	return specialCollections.filter((special) => {
+		const nav = config.navigation;
+
+		// Check config flags (default to true if undefined)
+		switch (special.type) {
+			case "sale":
+				return nav.showSaleCollection !== false;
+			case "deals":
+				return nav.showDealsCollection !== false;
+			case "best-sellers":
+				return nav.showBestSellers !== false;
+			case "new-arrivals":
+				return nav.showNewArrivals !== false;
+			case "featured":
+				return nav.showFeaturedCollection !== false;
+			case "clearance":
+				return nav.showClearance !== false;
+			default:
+				return true;
+		}
+	});
+}
+
 // Get complete menu data with strategy analysis
 export const getMenuData = cache(async (): Promise<MenuData> => {
 	try {
@@ -119,9 +150,18 @@ export const getMenuData = cache(async (): Promise<MenuData> => {
 			items = await buildDynamicFallbackMenu();
 		}
 
-		// Get collections count for analysis
+		// Get collections for analysis and special detection
 		const collections = await getAllCollections();
 		const collectionCount = collections?.length || 0;
+
+		// Detect special collections (Sale, Deals, Best Sellers, etc.)
+		const allSpecialCollections = detectSpecialCollections(collections || []);
+
+		// Filter based on config settings
+		const specialCollections = filterSpecialCollectionsByConfig(allSpecialCollections, config);
+
+		// Check if "All Products" should be shown (default: true)
+		const showAllProducts = config.navigation.showAllProducts !== false;
 
 		// Count total menu items (including nested)
 		const menuItemCount = countNestedItems(items);
@@ -137,12 +177,16 @@ export const getMenuData = cache(async (): Promise<MenuData> => {
 		return {
 			items,
 			strategy,
+			specialCollections,
+			showAllProducts,
 		};
 	} catch (_error) {
 		// Fallback with minimal strategy
 		return {
 			items: BASIC_FALLBACK_MENU,
 			strategy: analyzeMenuStructure(0, 0, BASIC_FALLBACK_MENU.length, false),
+			specialCollections: [],
+			showAllProducts: true,
 		};
 	}
 });

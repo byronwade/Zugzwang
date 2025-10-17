@@ -43,6 +43,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useStoreConfig } from "@/hooks/use-store-config";
 import { CONTENT } from "@/lib/config/wadesdesign.config";
 import type { MenuStrategy } from "@/lib/utils/menu-analyzer";
+import type { SpecialCollection } from "@/lib/utils/special-collections-detector";
 import { MenuSheetFixed } from "./menu-sheet-fixed";
 
 type MenuItem = {
@@ -56,6 +57,8 @@ type HeaderClientProps = {
 	initialMenuItems: MenuItem[];
 	isAuthenticated: boolean;
 	menuStrategy: MenuStrategy;
+	specialCollections: SpecialCollection[];
+	showAllProducts: boolean;
 };
 
 type SearchHandlers = {
@@ -164,7 +167,13 @@ const _SearchBar = memo(function SearchBar({
 	);
 });
 
-export function HeaderClient({ initialMenuItems, isAuthenticated, menuStrategy }: HeaderClientProps) {
+export function HeaderClient({
+	initialMenuItems,
+	isAuthenticated,
+	menuStrategy,
+	specialCollections,
+	showAllProducts,
+}: HeaderClientProps) {
 	// 1. Context hooks first
 	const { openCart, cart } = useCart();
 	const { wishlist } = useWishlist();
@@ -629,10 +638,39 @@ export function HeaderClient({ initialMenuItems, isAuthenticated, menuStrategy }
 				<nav className="h-[var(--header-nav-height)] flex-shrink-0 border-border border-b bg-background">
 					<div className="container mx-auto h-full px-4">
 						<div className="flex h-full items-center">
-							<MenuSheetFixed items={initialMenuItems} strategy={menuStrategy} />
+							<MenuSheetFixed
+								items={initialMenuItems}
+								showAllProducts={showAllProducts}
+								specialCollections={specialCollections}
+								strategy={menuStrategy}
+							/>
 
 							<ScrollArea className="w-full whitespace-nowrap">
 								<div className="flex items-center space-x-6">
+									{/* All Products Link */}
+									{showAllProducts && (
+										<Link
+											className="shrink-0 py-1 font-medium text-muted-foreground text-sm transition-colors hover:text-primary"
+											href="/collections/all"
+											prefetch={true}
+										>
+											All Products
+										</Link>
+									)}
+
+									{/* Special Collections - No Icons, Same Style as Menu Items */}
+									{specialCollections.map((special) => (
+										<Link
+											className="shrink-0 py-1 font-medium text-muted-foreground text-sm transition-colors hover:text-primary"
+											href={`/collections/${special.collection.handle}`}
+											key={special.type}
+											prefetch={true}
+										>
+											{special.label}
+										</Link>
+									))}
+
+									{/* Regular Menu Items */}
 									{menuItems.main.map((item) => {
 										// Check if item has submenu items
 										if (item.items && item.items.length > 0) {

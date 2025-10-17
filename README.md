@@ -2,6 +2,8 @@
 
 **A modern, production-ready Next.js 16 + Shopify Storefront template** showcasing the latest web technologies and best practices for building high-performance e-commerce experiences.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/byronwade/Zugzwang&env=NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20store%20configuration%20required&envLink=https://github.com/byronwade/Zugzwang/blob/main/INSTALLATION.md&project-name=zugzwang-store&repository-name=zugzwang-store)
+
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Shopify](https://img.shields.io/badge/Shopify-Storefront_API-96bf48?logo=shopify)](https://shopify.dev/api/storefront)

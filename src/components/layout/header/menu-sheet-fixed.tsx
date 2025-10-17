@@ -13,6 +13,7 @@ import { getAllCollections, getPages } from "@/lib/api/shopify/actions";
 import { CONTENT } from "@/lib/config/wadesdesign.config";
 import type { ShopifyCollection, ShopifyPage } from "@/lib/types";
 import type { MenuStrategy } from "@/lib/utils/menu-analyzer";
+import type { SpecialCollection } from "@/lib/utils/special-collections-detector";
 import { LargeLayout } from "./menu-layouts/large-layout";
 import { MediumLayout } from "./menu-layouts/medium-layout";
 import { MinimalLayout } from "./menu-layouts/minimal-layout";
@@ -28,6 +29,8 @@ type MenuItem = {
 type MenuSheetProps = {
 	items: MenuItem[];
 	strategy: MenuStrategy;
+	specialCollections?: SpecialCollection[];
+	showAllProducts?: boolean;
 };
 
 const buildPageUrl = (page: ShopifyPage) => {
@@ -37,7 +40,7 @@ const buildPageUrl = (page: ShopifyPage) => {
 	return transformShopifyUrl(page.onlineStoreUrl || "/");
 };
 
-export function MenuSheetFixed({ items, strategy }: MenuSheetProps) {
+export function MenuSheetFixed({ items, strategy, specialCollections = [], showAllProducts = true }: MenuSheetProps) {
 	const router = useRouter();
 	const { storeName } = useStoreConfig();
 	const { openCart } = useCart();
@@ -88,6 +91,8 @@ export function MenuSheetFixed({ items, strategy }: MenuSheetProps) {
 			collections,
 			pages,
 			onNavigate: handleNavigate,
+			specialCollections,
+			showAllProducts,
 		};
 
 		switch (strategy.size) {

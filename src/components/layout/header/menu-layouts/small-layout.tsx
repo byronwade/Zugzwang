@@ -3,6 +3,7 @@
 import { ChevronRight, Package } from "lucide-react";
 import Image from "next/image";
 import type { ShopifyCollection, ShopifyPage } from "@/lib/types";
+import type { SpecialCollection } from "@/lib/utils/special-collections-detector";
 
 type MenuItem = {
 	id: string;
@@ -16,6 +17,8 @@ type SmallLayoutProps = {
 	collections: ShopifyCollection[];
 	pages: ShopifyPage[];
 	onNavigate: (url: string) => void;
+	specialCollections?: SpecialCollection[];
+	showAllProducts?: boolean;
 };
 
 /**
@@ -23,7 +26,14 @@ type SmallLayoutProps = {
  * For small stores with 3-7 collections and 3-10 pages
  * Shows images for collections, clean organization
  */
-export function SmallLayout({ menuItems, collections, pages, onNavigate }: SmallLayoutProps) {
+export function SmallLayout({
+	menuItems,
+	collections,
+	pages,
+	onNavigate,
+	specialCollections = [],
+	showAllProducts = true,
+}: SmallLayoutProps) {
 	return (
 		<div className="space-y-6">
 			{/* Main Navigation */}
@@ -58,6 +68,37 @@ export function SmallLayout({ menuItems, collections, pages, onNavigate }: Small
 									</div>
 								)}
 							</div>
+						))}
+					</div>
+				</div>
+			)}
+
+			{/* Special Collections & All Products */}
+			{(showAllProducts || specialCollections.length > 0) && (
+				<div className="space-y-2">
+					<h3 className="mb-3 px-2 font-semibold text-muted-foreground text-xs uppercase tracking-wider">Quick Links</h3>
+					<div className="space-y-1">
+						{/* All Products Link */}
+						{showAllProducts && (
+							<button
+								className="group flex w-full items-center justify-between rounded-lg p-3 transition-colors hover:bg-muted"
+								onClick={() => onNavigate("/collections/all")}
+							>
+								<span className="font-medium text-foreground text-sm">All Products</span>
+								<ChevronRight className="h-4 w-4 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-foreground" />
+							</button>
+						)}
+
+						{/* Special Collections */}
+						{specialCollections.map((special) => (
+							<button
+								className="group flex w-full items-center justify-between rounded-lg p-3 transition-colors hover:bg-muted"
+								key={special.type}
+								onClick={() => onNavigate(`/collections/${special.collection.handle}`)}
+							>
+								<span className="font-medium text-foreground text-sm">{special.label}</span>
+								<ChevronRight className="h-4 w-4 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-foreground" />
+							</button>
 						))}
 					</div>
 				</div>

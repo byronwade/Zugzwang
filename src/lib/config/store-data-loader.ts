@@ -4,7 +4,6 @@
  * Fetches store configuration from Shopify API and admin settings.
  * This replaces all hardcoded values with dynamic data from Shopify.
  */
-"use cache";
 
 import { getDefaultStoreConfig, getStoreConfig, type StoreConfig, setStoreConfig } from "./store-config";
 
@@ -59,9 +58,33 @@ const SHOP_QUERY = `
 `;
 
 /**
+ * Extract currency symbol from Shopify money format
+ */
+function extractCurrencySymbol(moneyFormat: string): string {
+	if (!moneyFormat) {
+		return "$";
+	}
+
+	// Common patterns in Shopify money formats
+	const patterns = [
+		/^([^0-9{]+)/, // Symbol at start
+		/([^0-9}]+)$/, // Symbol at end
+	];
+
+	for (const pattern of patterns) {
+		const match = moneyFormat.match(pattern);
+		if (match) {
+			return match[1].trim();
+		}
+	}
+
+	return "$"; // Fallback
+}
+
+/**
  * Load store configuration from Shopify API
  */
-export async function loadStoreConfiguration(): Promise<StoreConfig> {
+export const loadStoreConfiguration = async (): Promise<StoreConfig> => {
 	try {
 		const storeDomain = process.env.SHOPIFY_STORE_DOMAIN;
 		const storefrontToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
@@ -80,6 +103,10 @@ export async function loadStoreConfiguration(): Promise<StoreConfig> {
 				"X-Shopify-Storefront-Access-Token": storefrontToken,
 			},
 			body: JSON.stringify({ query: SHOP_QUERY }),
+			next: {
+				revalidate: 3600, // Cache for 1 hour
+				tags: ["store-config"],
+			},
 		});
 
 		if (!shopData.ok) {
@@ -123,9 +150,9 @@ export async function loadStoreConfiguration(): Promise<StoreConfig> {
 			},
 
 			contact: {
-				supportEmail: "support@example.com",
-				salesEmail: "sales@example.com",
-				phone: "+1 (555) 000-0000",
+				supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@yourstore.com",
+				salesEmail: process.env.NEXT_PUBLIC_SALES_EMAIL || "sales@yourstore.com",
+				phone: process.env.NEXT_PUBLIC_PHONE_MAIN || "+1 (555) 000-0000",
 			},
 
 			social: {
@@ -180,31 +207,7 @@ export async function loadStoreConfiguration(): Promise<StoreConfig> {
 		setStoreConfig(defaultConfig);
 		return defaultConfig;
 	}
-}
-
-/**
- * Extract currency symbol from Shopify money format
- */
-function extractCurrencySymbol(moneyFormat: string): string {
-	if (!moneyFormat) {
-		return "$";
-	}
-
-	// Common patterns in Shopify money formats
-	const patterns = [
-		/^([^0-9{]+)/, // Symbol at start
-		/([^0-9}]+)$/, // Symbol at end
-	];
-
-	for (const pattern of patterns) {
-		const match = moneyFormat.match(pattern);
-		if (match) {
-			return match[1].trim();
-		}
-	}
-
-	return "$"; // Fallback
-}
+};
 
 /**
  * Initialize store configuration on app start

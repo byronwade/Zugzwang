@@ -60,6 +60,14 @@ export type StoreConfig = {
 		mainMenu: string; // Shopify menu handle
 		footerMenu: string; // Shopify menu handle
 		affiliateLinks?: AffiliateLink[];
+		// Featured collections visibility (auto-detected but can be hidden)
+		showAllProducts?: boolean; // Show "All Products" link in nav (default: true)
+		showSaleCollection?: boolean; // Show Sale/Sales collection if it exists (default: true)
+		showDealsCollection?: boolean; // Show Deals collection if it exists (default: true)
+		showBestSellers?: boolean; // Show Best Sellers collection if it exists (default: true)
+		showNewArrivals?: boolean; // Show New Arrivals collection if it exists (default: true)
+		showFeaturedCollection?: boolean; // Show Featured collection if it exists (default: true)
+		showClearance?: boolean; // Show Clearance collection if it exists (default: true)
 	};
 
 	// Features (configurable via admin panel)
