@@ -172,34 +172,73 @@ export const getCollection = cache(
 	): Promise<ShopifyCollectionWithPagination | null> => {
 		try {
 			const page = options?.page || 1;
-			const limit = options?.limit || 20;
+			const limit = options?.limit || 24;
 			const sort = options?.sort || "MANUAL";
 			const reverse = options?.reverse;
 
-			// First, get the total count using a separate query
-			const countResponse = await shopifyFetch<{
-				collection: {
-					products: {
-						edges: Array<{ cursor: string }>;
+			// First, get the total count by paginating through all products
+			let totalProducts = 0;
+			let hasNextPage = true;
+			let countCursor = null;
+			let batchNum = 1;
+
+			console.log(`[Collection Count] Starting count for collection: ${handle}`);
+
+			// Fetch all products to get accurate count (Shopify limits to 250 per query)
+			while (hasNextPage && totalProducts < 10000) {
+				// Safety limit
+				const countResponse = await shopifyFetch<{
+					collection: {
+						products: {
+							edges: Array<{ cursor: string }>;
+							pageInfo: {
+								hasNextPage: boolean;
+								endCursor: string;
+							};
+						};
 					};
-				};
-			}>({
-				query: `
-					query getCollectionCount($handle: String!) {
-						collection(handle: $handle) {
-							products(first: 250) {
-								edges {
-									cursor
+				}>({
+					query: `
+						query getCollectionCount($handle: String!, $after: String) {
+							collection(handle: $handle) {
+								products(first: 250, after: $after) {
+									edges {
+										cursor
+									}
+									pageInfo {
+										hasNextPage
+										endCursor
+									}
 								}
 							}
 						}
-					}
-				`,
-				variables: { handle },
-				tags: [`${CACHE_TAGS.COLLECTION}-${handle}-count`],
-			});
+					`,
+					variables: { handle, after: countCursor },
+					tags: [`${CACHE_TAGS.COLLECTION}-${handle}-count`],
+					cache: "no-store", // Force fresh data for debugging
+				});
 
-			const totalProducts = countResponse.data?.collection?.products?.edges?.length || 0;
+				const edges = countResponse.data?.collection?.products?.edges || [];
+				const pageInfo = countResponse.data?.collection?.products?.pageInfo;
+
+				const batchSize = edges.length;
+				totalProducts += batchSize;
+				console.log(
+					`[Collection Count] Batch ${batchNum}: +${batchSize} products (total: ${totalProducts}, hasNext: ${pageInfo?.hasNextPage})`
+				);
+
+				hasNextPage = pageInfo?.hasNextPage || false;
+				countCursor = pageInfo?.endCursor || null;
+				batchNum++;
+
+				// Break if no more products
+				if (edges.length === 0) {
+					break;
+				}
+			}
+
+			console.log(`[Collection Count] Final total for ${handle}: ${totalProducts} products`);
+
 			const totalPages = Math.ceil(totalProducts / limit);
 
 			// For cursor-based pagination, we need to fetch the cursor for the current page
@@ -1173,23 +1212,7 @@ const _getCachedProducts = unstable_cache(
  */
 export async function getAllProducts(sort = "featured", page = 1, perPage = PRODUCTS_PER_PAGE) {
 	try {
-		// Use a cache key that includes the page and sort parameters
-		const cacheKey = `all-products-${sort}-${page}-${perPage}`;
-
-		// Check if we have this data in the cache
-		const cachedData = await unstable_cache(
-			async () => null, // This is just a check, not the actual data
-			[cacheKey],
-			{
-				revalidate: CACHE_TIMES.PRODUCTS,
-				tags: [CACHE_TAGS.PRODUCT],
-			}
-		)();
-
-		// If we have cached data, return it
-		if (cachedData) {
-			return cachedData;
-		}
+		console.log(`[getAllProducts] Fetching products: page=${page}, perPage=${perPage}, sort=${sort}`);
 
 		let sortKey = "RELEVANCE";
 		let reverse = false;
@@ -1445,15 +1468,18 @@ export async function getAllProducts(sort = "featured", page = 1, perPage = PROD
 		// For now, we'll use a fixed count for pagination
 		// In a production app, you would want to implement a more accurate count
 		// or use a separate query to get the total count
-		// Fetch dynamic product count
+		// Fetch dynamic product count with no cache to ensure fresh data
 		const countQuery = await shopifyFetch<{
 			products: { pageInfo: { hasNextPage: boolean }; edges: Array<{ cursor: string }> };
-		}>({ query: "query { products(first: 250) { pageInfo { hasNextPage } edges { cursor } } }", cache: "force-cache" });
+		}>({ query: "query { products(first: 250) { pageInfo { hasNextPage } edges { cursor } } }", cache: "no-store" });
 		let productsCount = countQuery.data?.products?.edges?.length || 0;
+		console.log(`[Product Count] Initial batch: ${productsCount} products`);
+
 		// If there are more products, we need to count them all
 		if (countQuery.data?.products?.pageInfo?.hasNextPage) {
 			let cursor = countQuery.data.products.edges.at(-1)?.cursor;
 			let hasMore = true;
+			let batchNum = 2;
 			while (hasMore && productsCount < 10_000) {
 				const nextBatch = await shopifyFetch<{
 					products: { pageInfo: { hasNextPage: boolean }; edges: Array<{ cursor: string }> };
@@ -1461,13 +1487,17 @@ export async function getAllProducts(sort = "featured", page = 1, perPage = PROD
 					query:
 						"query($cursor: String) { products(first: 250, after: $cursor) { pageInfo { hasNextPage } edges { cursor } } }",
 					variables: { cursor },
-					cache: "force-cache",
+					cache: "no-store",
 				});
-				productsCount += nextBatch.data?.products?.edges?.length || 0;
+				const batchSize = nextBatch.data?.products?.edges?.length || 0;
+				productsCount += batchSize;
+				console.log(`[Product Count] Batch ${batchNum}: +${batchSize} products (total: ${productsCount})`);
 				hasMore = nextBatch.data?.products?.pageInfo?.hasNextPage;
 				cursor = nextBatch.data?.products?.edges?.[nextBatch.data.products.edges.length - 1]?.cursor;
+				batchNum++;
 			}
 		}
+		console.log(`[Product Count] Final total: ${productsCount} products`);
 
 		// Create the result object
 		const result = {
@@ -1477,12 +1507,6 @@ export async function getAllProducts(sort = "featured", page = 1, perPage = PROD
 			},
 			productsCount,
 		};
-
-		// Cache the result
-		await unstable_cache(async () => result, [cacheKey], {
-			revalidate: CACHE_TIMES.PRODUCTS,
-			tags: [CACHE_TAGS.PRODUCT],
-		})();
 
 		return result;
 	} catch (_error) {

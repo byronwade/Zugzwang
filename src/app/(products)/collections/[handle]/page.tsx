@@ -360,21 +360,6 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 							title={collection.title}
 							totalProducts={collection.productsCount}
 						/>
-
-						{/* Add FAQ content if available */}
-						{faqContent.length > 0 && (
-							<div className="container mx-auto px-4 py-12">
-								<h2 className="mb-6 font-bold text-2xl">Frequently Asked Questions</h2>
-								<div className="space-y-6 divide-y divide-border">
-									{faqContent.map((faq, index) => (
-										<div className={index > 0 ? "pt-6" : ""} key={index}>
-											<h3 className="mb-2 font-medium text-foreground text-lg">{faq.question}</h3>
-											<p className="text-muted-foreground">{faq.answer}</p>
-										</div>
-									))}
-								</div>
-							</div>
-						)}
 					</Suspense>
 				</ErrorBoundary>
 			</>

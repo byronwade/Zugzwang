@@ -31,9 +31,13 @@ export function LargeLayout({ menuItems, collections, pages, onNavigate }: Large
 	const [searchQuery, setSearchQuery] = useState("");
 	const [activeTab, setActiveTab] = useState("all");
 
-	// Sort collections by product count (most popular first)
+	// Sort collections by product count (most popular first), exclude empty collections
 	const featuredCollections = useMemo(() => {
 		return [...collections]
+			.filter((c) => {
+				const productCount = c.products?.productsCount ?? c.products?.nodes?.length ?? 0;
+				return productCount > 0;
+			})
 			.sort((a, b) => {
 				const aCount = a.products?.productsCount ?? a.products?.nodes?.length ?? 0;
 				const bCount = b.products?.productsCount ?? b.products?.nodes?.length ?? 0;
@@ -42,9 +46,12 @@ export function LargeLayout({ menuItems, collections, pages, onNavigate }: Large
 			.slice(0, 3);
 	}, [collections]);
 
-	// Filter based on search
+	// Filter based on search and product count
 	const filteredCollections = useMemo(() => {
-		return collections.filter((c) => c.title.toLowerCase().includes(searchQuery.toLowerCase()));
+		return collections.filter((c) => {
+			const productCount = c.products?.productsCount ?? c.products?.nodes?.length ?? 0;
+			return productCount > 0 && c.title.toLowerCase().includes(searchQuery.toLowerCase());
+		});
 	}, [collections, searchQuery]);
 
 	const filteredPages = useMemo(() => {

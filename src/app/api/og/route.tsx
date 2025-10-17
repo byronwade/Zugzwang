@@ -6,13 +6,13 @@ export async function GET(request: NextRequest) {
 		const { searchParams } = new URL(request.url);
 
 		// Get parameters
-		const title = searchParams.get("title") || "Premium Mushroom Cultivation Supplies";
-		const description = searchParams.get("description") || "Expert-curated products for successful mushroom growing";
+		const title = searchParams.get("title") || "Zugzwang";
+		const description = searchParams.get("description") || "Next.js 16 + Shopify Storefront Template";
 		const price = searchParams.get("price");
 		const image = searchParams.get("image");
 		const type = searchParams.get("type") || "default"; // default, product, collection, article
 		// Use absolute URL for logo - @vercel/og requires absolute URLs
-		const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zugzology.com";
+		const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || "https://yourdomain.com";
 		const logo = searchParams.get("logo") || `${baseUrl}/icon-192x192.png`;
 
 		return new ImageResponse(
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 					alignItems: "center",
 					justifyContent: "center",
 					backgroundColor: "#ffffff",
-					backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+					backgroundImage: "linear-gradient(135deg, #2A6592 0%, #3B82F6 50%, #C18A3C 100%)",
 				}}
 			>
 				{/* Background Pattern */}
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
 								color: "#4a5568",
 							}}
 						>
-							ZUGZOLOGY
+							{process.env.NEXT_PUBLIC_STORE_NAME?.toUpperCase() || "ZUGZWANG"}
 						</div>
 					</div>
 

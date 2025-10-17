@@ -21,6 +21,7 @@ import { SignOutButton } from "@/components/features/auth/sign-out-button";
 import { CartSheet } from "@/components/features/cart/cart-sheet";
 import { SearchDropdown } from "@/components/features/search/search-dropdown";
 import { DynamicAffiliateLinksDropdown } from "@/components/layout/header/affiliate-links-dynamic";
+import { SettingsDropdown } from "@/components/layout/header/settings-dropdown";
 // import { DynamicPromoBanner } from "@/components/layout/promo-banner-dynamic";
 import { useAuthContext, useSearch } from "@/components/providers";
 import { useCart } from "@/components/providers/cart-provider";
@@ -527,6 +528,11 @@ export function HeaderClient({
 									<span className="sr-only">{CONTENT.navigation.buttons.wishlist}</span>
 								</Button>
 
+								{/* Settings Dropdown - Hidden on mobile */}
+								<div className="hidden sm:block">
+									<SettingsDropdown variant="icon" />
+								</div>
+
 								{/* Cart Button - Always visible */}
 								<Button
 									className="relative inline-flex h-9 w-9 items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
@@ -669,6 +675,11 @@ export function HeaderClient({
 											{special.label}
 										</Link>
 									))}
+
+									{/* Separator after special collections if they exist */}
+									{(showAllProducts || specialCollections.length > 0) && menuItems.main.length > 0 && (
+										<div className="h-5 w-px shrink-0 bg-border" />
+									)}
 
 									{/* Regular Menu Items */}
 									{menuItems.main.map((item) => {

@@ -44,7 +44,14 @@ export function MinimalLayout({ menuItems, collections, pages, onNavigate }: Min
 			{/* Collections - Simple list */}
 			{collections.length > 0 && (
 				<div className="space-y-1">
-					{collections.slice(0, 4).map((collection) => (
+					{collections
+						.filter((collection) => {
+							const productCount =
+								collection.products?.productsCount ?? collection.products?.nodes?.length ?? 0;
+							return productCount > 0;
+						})
+						.slice(0, 4)
+						.map((collection) => (
 						<button
 							className="group flex w-full items-center justify-between rounded-lg p-3 transition-colors hover:bg-muted"
 							key={collection.id}

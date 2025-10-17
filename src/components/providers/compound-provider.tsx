@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import React, { type ReactNode, Suspense, useEffect, useMemo } from "react";
 import { SearchDataLoader } from "@/components/features/search/search-data-loader";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SettingsProvider } from "@/contexts/settings-context";
 import { AuthProvider } from "./auth-provider";
 import { CartProvider } from "./cart-provider";
 import { EnhancedNavigationProvider } from "./enhanced-navigation-provider";
@@ -93,9 +94,10 @@ export function CompoundProviders({ children }: CompoundProvidersProps) {
 					enableSystem
 					storageKey="theme-preference"
 				>
-					<TooltipProvider>
-						<Suspense fallback={null}>
-							<ScrollReset>
+					<SettingsProvider>
+						<TooltipProvider>
+							<Suspense fallback={null}>
+								<ScrollReset>
 								<SearchProvider>
 									<EnhancedNavigationProvider>
 										<SearchDataLoader />
@@ -111,6 +113,7 @@ export function CompoundProviders({ children }: CompoundProvidersProps) {
 							</ScrollReset>
 						</Suspense>
 					</TooltipProvider>
+					</SettingsProvider>
 				</ThemeProvider>
 			</AuthProvider>
 		</SessionProvider>

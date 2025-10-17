@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { FAQSection } from "./faq-section";
 
 type WhyChooseBentoV2Props = {
 	brandName?: string;
@@ -312,6 +313,9 @@ export function WhyChooseBentoV2({
 							))}
 						</div>
 					</div>
+
+					{/* FAQ Section - Full Width */}
+					<FAQSection />
 				</div>
 			</div>
 		</section>

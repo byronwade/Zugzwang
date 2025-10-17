@@ -83,9 +83,10 @@ Example: https://zugzwang-demo.vercel.app
 
 ### Thumbnail Image URL (1200x630px)
 ```
-[TO BE CREATED - See instructions below]
-Example: https://github.com/byronwade/Zugzwang/raw/main/public/og-image.jpg
+https://your-demo-url.vercel.app/api/og
 ```
+**Note**: Replace `your-demo-url` with your actual deployed demo URL.
+The template includes a dynamic OG image generator that creates the thumbnail automatically.
 
 ### Screenshots (Optional)
 ```
@@ -222,8 +223,9 @@ shopify, ecommerce, nextjs16, typescript, react19, tailwindcss, shadcn-ui, store
 
 ### Deploy Button Markdown
 ```markdown
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/byronwade/Zugzwang&env=NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20store%20configuration%20required&envLink=https://github.com/byronwade/Zugzwang/blob/main/INSTALLATION.md&project-name=zugzwang-store&repository-name=zugzwang-store&demo-title=Zugzwang%20Demo&demo-description=Modern%20Next.js%2016%20Shopify%20Storefront&demo-url=https://zugzwang-demo.vercel.app&demo-image=https://github.com/byronwade/Zugzwang/raw/main/public/og-image.jpg)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/byronwade/Zugzwang&env=NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20store%20configuration%20required&envLink=https://github.com/byronwade/Zugzwang/blob/main/INSTALLATION.md&project-name=zugzwang-store&repository-name=zugzwang-store&demo-title=Zugzwang%20Demo&demo-description=Modern%20Next.js%2016%20Shopify%20Storefront&demo-url=https://your-demo-url.vercel.app&demo-image=https://your-demo-url.vercel.app/api/og)
 ```
+**Note**: Replace both instances of `your-demo-url` with your actual deployed demo URL.
 
 ---
 
@@ -301,36 +303,35 @@ Before submitting, ensure:
 
 ---
 
-## Creating the Thumbnail Image
+## Dynamic OG Image Generator (No Manual Creation Needed!)
 
-### Requirements:
-- **Dimensions**: 1200x630px (exact)
-- **Format**: JPG or PNG
-- **File size**: Under 1MB
-- **Content**: Show homepage with branding
+### ✅ Already Implemented!
+The template includes a **dynamic OG image generator** at `/api/og` that automatically creates the thumbnail image. No need to manually create or upload images!
 
-### Recommended Tools:
-- Figma (free): https://www.figma.com
-- Canva (free): https://www.canva.com
-- Photoshop/Sketch (paid)
+### How It Works:
+The template uses Next.js's `@vercel/og` package to dynamically generate Open Graph images with:
+- Zugzwang branding (automatically uses `NEXT_PUBLIC_STORE_NAME` env var)
+- Template colors (#2A6592 primary, #C18A3C secondary)
+- Next.js 16 + Shopify + TypeScript badges
+- Proper 1200x630px dimensions
+- Gradient background with brand colors
 
-### Design Tips:
-1. Show the homepage or key feature
-2. Include "Zugzwang" logo/text
-3. Add "Next.js 16" badge
-4. Add "Shopify Storefront" badge
-5. Use brand colors (#2A6592, #C18A3C)
-6. Keep text large and readable
-7. Ensure good contrast
-
-### Upload Location:
+### Usage for Submission:
 ```
-/public/og-image.jpg
+https://your-demo-url.vercel.app/api/og
 ```
 
-Then use in submission:
+Simply replace `your-demo-url` with your deployed demo URL and this will be your thumbnail!
+
+### Customization (Optional):
+The OG image generator supports parameters:
+- `?title=Custom+Title` - Change the title
+- `?description=Custom+Description` - Change the description
+- `?type=product` - Add product-specific styling
+
+Example:
 ```
-https://github.com/byronwade/Zugzwang/raw/main/public/og-image.jpg
+https://your-demo-url.vercel.app/api/og?title=Zugzwang&description=Next.js+16+Template
 ```
 
 ---

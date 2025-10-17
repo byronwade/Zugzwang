@@ -157,8 +157,12 @@ export const getMenuData = cache(async (): Promise<MenuData> => {
 		// Detect special collections (Sale, Deals, Best Sellers, etc.)
 		const allSpecialCollections = detectSpecialCollections(collections || []);
 
-		// Filter based on config settings
-		const specialCollections = filterSpecialCollectionsByConfig(allSpecialCollections, config);
+		// Filter based on config settings and product count
+		const specialCollections = filterSpecialCollectionsByConfig(allSpecialCollections, config).filter((special) => {
+			const productCount =
+				special.collection.products?.productsCount ?? special.collection.products?.nodes?.length ?? 0;
+			return productCount > 0;
+		});
 
 		// Check if "All Products" should be shown (default: true)
 		const showAllProducts = config.navigation.showAllProducts !== false;

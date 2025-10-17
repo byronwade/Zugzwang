@@ -85,6 +85,8 @@ function extractCurrencySymbol(moneyFormat: string): string {
  * Load store configuration from Shopify API
  */
 export const loadStoreConfiguration = async (): Promise<StoreConfig> => {
+	"use cache";
+
 	try {
 		const storeDomain = process.env.SHOPIFY_STORE_DOMAIN;
 		const storefrontToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
@@ -213,6 +215,8 @@ export const loadStoreConfiguration = async (): Promise<StoreConfig> => {
  * Initialize store configuration on app start
  */
 export const initializeStoreConfig = async () => {
+	"use cache";
+
 	try {
 		await loadStoreConfiguration();
 	} catch (_error) {}

@@ -111,7 +111,14 @@ export function SmallLayout({
 						Shop Collections
 					</h3>
 					<div className="space-y-1">
-						{collections.slice(0, 6).map((collection) => (
+						{collections
+							.filter((collection) => {
+								const productCount =
+									collection.products?.productsCount ?? collection.products?.nodes?.length ?? 0;
+								return productCount > 0;
+							})
+							.slice(0, 6)
+							.map((collection) => (
 							<button
 								className="group flex w-full items-center gap-3 rounded-lg p-3 transition-colors hover:bg-muted"
 								key={collection.id}

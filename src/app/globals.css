@@ -84,6 +84,37 @@ body {
 		animation-delay: 1s;
 	}
 
+	/* Dynamic Product Grid - Respects grid-columns setting */
+	.product-grid {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+	}
+
+	@media (min-width: 640px) {
+		.product-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 768px) {
+		.product-grid {
+			grid-template-columns: repeat(calc(var(--grid-columns) - 1), minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.product-grid {
+			grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.product-grid {
+			grid-template-columns: repeat(calc(var(--grid-columns) + 1), minmax(0, 1fr));
+		}
+	}
+
 	/* Hero section animations - optimized for performance */
 	@keyframes fadeUp {
 		from {
@@ -191,6 +222,15 @@ body {
 @layer base {
 	:root {
 		--safe-area-inset-top: env(safe-area-inset-top, 0px);
+
+		/* UI Settings Variables */
+		--container-max-width: 80rem;
+		--density-scale: 1;
+		--font-scale: 1;
+		--animation-duration: 200ms;
+		--animation-speed: 200ms;
+		--grid-columns: 4;
+
 		/* Zugzology Mushroom Theme - Light Mode */
 		--primary: 206 55 37;
 		/* Psilocybin Blue - professional, trustworthy */
@@ -401,6 +441,53 @@ body {
 			appearance: none;
 		}
 	}
+
+	/* High Contrast Mode */
+	.high-contrast {
+		--border: 0 0 20;
+		--input: 0 0 20;
+	}
+
+	.dark.high-contrast {
+		--border: 0 0 80;
+		--input: 0 0 80;
+		--muted: 8 8 25;
+	}
+
+	/* Apply UI settings variables */
+	* {
+		transition-duration: var(--animation-speed);
+	}
+
+	body {
+		font-size: calc(1rem * var(--font-scale));
+	}
+
+	.container {
+		max-width: var(--container-max-width);
+	}
+
+	/* Apply density scale to spacing utilities */
+	.p-1 { padding: calc(0.25rem * var(--density-scale)) !important; }
+	.p-2 { padding: calc(0.5rem * var(--density-scale)) !important; }
+	.p-3 { padding: calc(0.75rem * var(--density-scale)) !important; }
+	.p-4 { padding: calc(1rem * var(--density-scale)) !important; }
+	.p-6 { padding: calc(1.5rem * var(--density-scale)) !important; }
+	.p-8 { padding: calc(2rem * var(--density-scale)) !important; }
+
+	.m-1 { margin: calc(0.25rem * var(--density-scale)) !important; }
+	.m-2 { margin: calc(0.5rem * var(--density-scale)) !important; }
+	.m-3 { margin: calc(0.75rem * var(--density-scale)) !important; }
+	.m-4 { margin: calc(1rem * var(--density-scale)) !important; }
+	.m-6 { margin: calc(1.5rem * var(--density-scale)) !important; }
+	.m-8 { margin: calc(2rem * var(--density-scale)) !important; }
+
+	.gap-1 { gap: calc(0.25rem * var(--density-scale)) !important; }
+	.gap-2 { gap: calc(0.5rem * var(--density-scale)) !important; }
+	.gap-3 { gap: calc(0.75rem * var(--density-scale)) !important; }
+	.gap-4 { gap: calc(1rem * var(--density-scale)) !important; }
+	.gap-6 { gap: calc(1.5rem * var(--density-scale)) !important; }
+	.gap-8 { gap: calc(2rem * var(--density-scale)) !important; }
 }
 /* Marquee styles */
 .marquee-container {

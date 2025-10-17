@@ -28,8 +28,11 @@ type MediumLayoutProps = {
 export function MediumLayout({ menuItems, collections, pages, onNavigate }: MediumLayoutProps) {
 	const [searchQuery, setSearchQuery] = useState("");
 
-	// Filter collections and pages based on search
-	const filteredCollections = collections.filter((c) => c.title.toLowerCase().includes(searchQuery.toLowerCase()));
+	// Filter collections and pages based on search and product count
+	const filteredCollections = collections.filter((c) => {
+		const productCount = c.products?.productsCount ?? c.products?.nodes?.length ?? 0;
+		return productCount > 0 && c.title.toLowerCase().includes(searchQuery.toLowerCase());
+	});
 
 	const filteredPages = pages.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
